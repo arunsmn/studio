@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Phase 1 — PaletteAI build** (in progress — Section 07 next)
+**Phase 1 — PaletteAI build** (in progress — Section 08 next)
 
 ---
 
@@ -21,7 +21,7 @@
 | 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop |
 | 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop |
 | 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop |
-| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | 🔄 In progress |                   |
+| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    |                   |
 | 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ⬜ Not started |                   |
 | 09 — Vercel deployment                 | —                                   | ⬜ Not started |                   |
 | 10 — Phase 2 features                  | feat/palette-ai-\*                  | ⬜ Not started | Post-launch       |
@@ -97,14 +97,15 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `components/SwatchGrid.tsx`: desktop row + mobile layout switch at md breakpoint
 - `components/SkeletonGrid.tsx`: pulsing placeholders matching swatch layout
 
----
-
-## In Progress
-
 ### Section 07 — PaletteAI page + preview + export (feat/palette-ai-page-preview-export)
 
-- Branch created: `feat/palette-ai-page-preview-export`
-- Files to create: LivePreview.tsx, ExportPanel.tsx, HistoryDrawer.tsx, app/page.tsx, app/globals.css
+- `components/LivePreview.tsx`: fake UI with Card / Dashboard / Landing layout modes; colours applied via inline styles; mode toggle above preview; smooth `transition-colors duration-300` on palette change
+- `components/ExportPanel.tsx`: CSS (hex + HSL toggle) / Tailwind / JSON tabs; per-tab CopyButton; uses `hexToHSL` from `@studio/utils`
+- `components/HistoryDrawer.tsx`: slide-in right drawer (z-50, backdrop overlay); Escape-key close; mini BannerStrip per entry; relative timestamps; model badge (claude/gemini); clear all button
+- `app/page.tsx`: wires LivePreview + ExportPanel + HistoryDrawer; saves each generated palette to history via `useHistory`; history-restore sets activePalette without re-fetching; history button in AppShell topbar shows count badge
+- `packages/ui/src/AppShell.tsx`: added optional `actions?: React.ReactNode` slot to topbar (additive, non-breaking)
+
+---
 
 ---
 
@@ -132,10 +133,9 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Execute Section 07 — LivePreview, ExportPanel, HistoryDrawer, main page
-2. Checkpoint: full flow works end to end
-3. Commit and merge feat/palette-ai-page-preview-export → develop
-4. Move to Section 08 — tests + polish
+1. Checkpoint: verify full flow end to end at http://localhost:3001
+2. Commit and merge feat/palette-ai-page-preview-export → develop
+3. Move to Section 08 — tests + polish
 
 ---
 

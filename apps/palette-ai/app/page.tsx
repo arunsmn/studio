@@ -1,29 +1,80 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { AppShell, ErrorState } from "@studio/ui";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { nanoid } from "nanoid";
+import { AppShell, ErrorState, Button } from "@studio/ui";
+import { Clock } from "lucide-react";
 import { MoodInput } from "../components/MoodInput";
 import { SwatchGrid } from "../components/SwatchGrid";
 import { SkeletonGrid } from "../components/SkeletonGrid";
+import { LivePreview } from "../components/LivePreview";
+import { ExportPanel } from "../components/ExportPanel";
+import { HistoryDrawer } from "../components/HistoryDrawer";
 import { usePalette } from "../hooks/usePalette";
-import type { PaletteOptions } from "../lib/types";
+import { useHistory } from "../hooks/useHistory";
+import type { Colour, Palette, PaletteOptions } from "../lib/types";
 
 export default function Home() {
-  const { palette, isLoading, error, cooldown, generate } = usePalette();
+  const { palette: generatedPalette, isLoading, error, cooldown, generate } = usePalette();
+  const { history, addToHistory, clearHistory } = useHistory();
+
+  const [activePalette, setActivePalette] = useState<Colour[] | null>(null);
   const [lastCount, setLastCount] = useState(5);
   const [lastOptions, setLastOptions] = useState<PaletteOptions | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const pendingPaletteRef = useRef<Omit<Palette, "colours"> | null>(null);
+
+  useEffect(() => {
+    if (generatedPalette && pendingPaletteRef.current) {
+      const full: Palette = {
+        ...pendingPaletteRef.current,
+        colours: generatedPalette,
+      };
+      addToHistory(full);
+      setActivePalette(generatedPalette);
+      pendingPaletteRef.current = null;
+    }
+  }, [generatedPalette, addToHistory]);
 
   const handleGenerate = useCallback(
     async (options: PaletteOptions) => {
       setLastCount(options.count);
       setLastOptions(options);
+      pendingPaletteRef.current = {
+        id: nanoid(),
+        mood: options.mood,
+        model: options.model,
+        createdAt: Date.now(),
+      };
       await generate(options);
     },
     [generate]
   );
 
+  function handleHistorySelect(palette: Palette) {
+    setActivePalette(palette.colours);
+    setLastCount(palette.colours.length);
+  }
+
   return (
-    <AppShell title="PaletteAI">
+    <AppShell
+      title="PaletteAI"
+      actions={
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setHistoryOpen(true)}
+          aria-label="Open palette history"
+        >
+          <Clock className="h-4 w-4" />
+          {history.length > 0 && (
+            <span className="ml-1 text-xs tabular-nums text-gray-500 dark:text-gray-400">
+              {history.length}
+            </span>
+          )}
+        </Button>
+      }
+    >
       <div className="mx-auto max-w-6xl px-4 py-6 md:flex md:gap-6">
         <div className="w-full md:w-[400px] md:flex-shrink-0">
           <MoodInput
@@ -32,18 +83,26 @@ export default function Home() {
             cooldown={cooldown}
           />
         </div>
-        <div className="mt-6 flex-1 min-w-0 md:mt-0">
+
+        <div className="mt-6 min-w-0 flex-1 md:mt-0">
           {isLoading && <SkeletonGrid count={lastCount} />}
+
           {!isLoading && error && (
             <ErrorState
               message={error}
               onRetry={lastOptions ? () => generate(lastOptions) : undefined}
             />
           )}
-          {!isLoading && !error && palette && (
-            <SwatchGrid colours={palette} count={lastCount} />
+
+          {!isLoading && !error && activePalette && (
+            <div className="flex flex-col gap-6">
+              <SwatchGrid colours={activePalette} count={lastCount} />
+              <LivePreview colours={activePalette} />
+              <ExportPanel colours={activePalette} />
+            </div>
           )}
-          {!isLoading && !error && !palette && (
+
+          {!isLoading && !error && !activePalette && (
             <div className="flex h-full flex-col items-center justify-center py-20 text-center">
               <p className="text-sm text-gray-400 dark:text-gray-500">
                 Describe a mood above to generate your palette
@@ -52,6 +111,14 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      <HistoryDrawer
+        open={historyOpen}
+        history={history}
+        onClose={() => setHistoryOpen(false)}
+        onSelect={handleHistorySelect}
+        onClear={clearHistory}
+      />
     </AppShell>
   );
 }
