@@ -17,8 +17,8 @@
 |---------|--------|--------|-------|
 | 01 — Monorepo scaffold | feat/monorepo-scaffold | ✅ Complete | Merged to develop |
 | 02 — Shared packages | feat/shared-packages | ✅ Complete | Merged to develop |
-| 03 — Root site | feat/root-site | ✅ Complete | PR pending → develop |
-| 04 — Shared UI components | feat/shared-ui-components | ⬜ Not started | |
+| 03 — Root site | feat/root-site | ✅ Complete | Merged to develop |
+| 04 — Shared UI components | feat/shared-ui-components | ✅ Complete | PR pending → develop |
 | 05 — PaletteAI API layer | feat/palette-ai-api | ⬜ Not started | |
 | 06 — PaletteAI input + swatches | feat/palette-ai-ui-input-swatches | ⬜ Not started | |
 | 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ⬜ Not started | |
@@ -46,6 +46,16 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `packages/ui`: scaffold only — package.json, tsconfig, empty index (components added in Section 04)
 - `packages/ai-core`: AIModel/ProviderFn/RateLimitResult types, claudeProvider (claude-haiku-4-5-20251001), geminiProvider (gemini-2.0-flash), checkRateLimit (Vercel KV, 10s cooldown, 100/day cap)
 
+### Section 04 — Shared UI components (feat/shared-ui-components)
+- `Button`: primary/ghost/pill variants, sm/md/lg sizes, loading spinner (Loader2)
+- `PillChip`: radio-style selectable chip, Enter/Space keyboard toggle
+- `CopyButton`: clipboard copy with 1500ms "Copied!" feedback, sm/md sizes
+- `ModelToggle`: Gemini (green dot) / Claude (purple dot) pill toggle, writes to localStorage
+- `Skeleton`: animate-pulse rectangles, configurable count/height/width
+- `ErrorState`: AlertCircle icon, message, optional retry button
+- `AppShell`: sticky topbar (Studio / app title / optional back link), full-height layout
+- Updated `packages/ui/package.json`: added @studio/utils, lucide-react deps
+
 ### Section 03 — Root showcase site (feat/root-site)
 - `apps/root/package.json`, `next.config.ts`, `tailwind.config.ts`, `tsconfig.json`, `postcss.config.mjs`
 - `app/layout.tsx`: Inter font, dark mode html class, metadata
@@ -62,7 +72,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## In Progress
 
-_Section 04 — Shared UI components (up next)_
+_Section 05 — PaletteAI API layer (up next)_
 
 ---
 

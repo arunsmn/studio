@@ -1,3 +1,7 @@
-// Components are added in Section 04 (feat/shared-ui-components).
-// All components use the "use client" directive.
-export {};
+export { AppShell } from "./AppShell";
+export { Button } from "./Button";
+export { CopyButton } from "./CopyButton";
+export { ErrorState } from "./ErrorState";
+export { ModelToggle } from "./ModelToggle";
+export { PillChip } from "./PillChip";
+export { Skeleton } from "./Skeleton";
