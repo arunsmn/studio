@@ -1,0 +1,7 @@
+{
+  "name": "@studio/tailwind-config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "tailwind.config.base.ts",
+  "files": ["tailwind.config.base.ts"]
+}

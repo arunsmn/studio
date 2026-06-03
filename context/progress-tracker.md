@@ -15,8 +15,8 @@
 
 | Section | Branch | Status | Notes |
 |---------|--------|--------|-------|
-| 01 — Monorepo scaffold | feat/monorepo-scaffold | ✅ Complete | PR pending → develop |
-| 02 — Shared packages | feat/shared-packages | ⬜ Not started | |
+| 01 — Monorepo scaffold | feat/monorepo-scaffold | ✅ Complete | Merged to develop |
+| 02 — Shared packages | feat/shared-packages | ✅ Complete | PR pending → develop |
 | 03 — Root site | feat/root-site | ⬜ Not started | |
 | 04 — Shared UI components | feat/shared-ui-components | ⬜ Not started | |
 | 05 — PaletteAI API layer | feat/palette-ai-api | ⬜ Not started | |
@@ -40,11 +40,17 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - Updated `.gitignore` to cover node_modules, .next, dist, .turbo, .env*.local, *.tsbuildinfo
 - Created `.env.example` with all four required env var keys
 
+### Section 02 — Shared packages (feat/shared-packages)
+- `packages/tailwind-config`: package.json + tailwind.config.base.ts (darkMode, Inter font, pulse-slow animation, screens)
+- `packages/utils`: cn(), hexToRgb, hexToHSL, getContrastRatio, getTextColour, isWCAGAA, isWCAGAAA, encodeState, decodeState
+- `packages/ui`: scaffold only — package.json, tsconfig, empty index (components added in Section 04)
+- `packages/ai-core`: AIModel/ProviderFn/RateLimitResult types, claudeProvider (claude-haiku-4-5-20251001), geminiProvider (gemini-2.0-flash), checkRateLimit (Vercel KV, 10s cooldown, 100/day cap)
+
 ---
 
 ## In Progress
 
-_Section 02 — Shared packages (up next)_
+_Section 03 — Root site (up next)_
 
 ---
 
@@ -73,15 +79,15 @@ _Section 02 — Shared packages (up next)_
 
 ## Files Created So Far
 
-_None — project not initialised yet._
+See Completed Work section above for a per-section breakdown.
 
 ---
 
 ## Next Steps
 
-1. Run Checkpoint 01: `pnpm install` then commit and push `feat/monorepo-scaffold`
-2. Open PR: feat/monorepo-scaffold → develop on GitHub
-3. Run Section 02: shared packages
+1. Run Checkpoint 02: `pnpm install && pnpm build`, commit, push `feat/shared-packages`, open PR → develop
+2. Run Section 03: root showcase site
+3. Run Section 04: shared UI components
 
 ---
 
