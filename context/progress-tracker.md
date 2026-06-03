@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Phase 0 — Setup** (not started)
+**Phase 0 — Setup** (in progress)
 
 ---
 
@@ -15,7 +15,7 @@
 
 | Section | Branch | Status | Notes |
 |---------|--------|--------|-------|
-| 01 — Monorepo scaffold | feat/monorepo-scaffold | ⬜ Not started | |
+| 01 — Monorepo scaffold | feat/monorepo-scaffold | ✅ Complete | PR pending → develop |
 | 02 — Shared packages | feat/shared-packages | ⬜ Not started | |
 | 03 — Root site | feat/root-site | ⬜ Not started | |
 | 04 — Shared UI components | feat/shared-ui-components | ⬜ Not started | |
@@ -32,13 +32,19 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Completed Work
 
-_Nothing completed yet._
+### Section 01 — Monorepo scaffold (feat/monorepo-scaffold)
+- Created `package.json` (root) with pnpm workspaces, turbo scripts, devDeps
+- Created `pnpm-workspace.yaml` with apps/* and packages/* globs
+- Created `turbo.json` (v2) with build/dev/lint/test tasks + globalEnv passthrough
+- Created `tsconfig.base.json` with strict: true, ES2022, moduleResolution: bundler
+- Updated `.gitignore` to cover node_modules, .next, dist, .turbo, .env*.local, *.tsbuildinfo
+- Created `.env.example` with all four required env var keys
 
 ---
 
 ## In Progress
 
-_Nothing in progress yet._
+_Section 02 — Shared packages (up next)_
 
 ---
 
@@ -73,10 +79,9 @@ _None — project not initialised yet._
 
 ## Next Steps
 
-1. Initialise GitHub repo
-2. Run Section 01: monorepo scaffold
+1. Run Checkpoint 01: `pnpm install` then commit and push `feat/monorepo-scaffold`
+2. Open PR: feat/monorepo-scaffold → develop on GitHub
 3. Run Section 02: shared packages
-4. Continue in order per the spec file
 
 ---
 
