@@ -39,7 +39,12 @@ function stripHtml(str: string): string {
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const ip = req.headers.get("x-forwarded-for") ?? "unknown";
 
-  const rateLimit = await checkRateLimit(ip);
+  let rateLimit = { allowed: true, waitSeconds: 0 };
+  try {
+    rateLimit = await checkRateLimit(ip);
+  } catch {
+    // KV not configured (local dev) — allow request
+  }
   if (!rateLimit.allowed) {
     return NextResponse.json(
       {
