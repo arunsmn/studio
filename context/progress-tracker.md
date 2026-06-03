@@ -18,8 +18,8 @@
 | 01 — Monorepo scaffold | feat/monorepo-scaffold | ✅ Complete | Merged to develop |
 | 02 — Shared packages | feat/shared-packages | ✅ Complete | Merged to develop |
 | 03 — Root site | feat/root-site | ✅ Complete | Merged to develop |
-| 04 — Shared UI components | feat/shared-ui-components | ✅ Complete | PR pending → develop |
-| 05 — PaletteAI API layer | feat/palette-ai-api | ⬜ Not started | |
+| 04 — Shared UI components | feat/shared-ui-components | ✅ Complete | Merged to develop |
+| 05 — PaletteAI API layer | feat/palette-ai-api | ✅ Complete | PR pending → develop |
 | 06 — PaletteAI input + swatches | feat/palette-ai-ui-input-swatches | ⬜ Not started | |
 | 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ⬜ Not started | |
 | 08 — Tests + polish | feat/palette-ai-tests-polish | ⬜ Not started | |
@@ -56,6 +56,18 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `AppShell`: sticky topbar (Studio / app title / optional back link), full-height layout
 - Updated `packages/ui/package.json`: added @studio/utils, lucide-react deps
 
+### Section 05 — PaletteAI API layer (feat/palette-ai-api)
+- `apps/palette-ai/`: package.json (nanoid, vitest, @vitejs/plugin-react), next.config.ts, tailwind.config.ts, postcss.config.mjs, tsconfig.json, vitest.config.ts
+- `app/layout.tsx`: Inter font, dark mode, metadata
+- `app/globals.css`: Tailwind directives
+- `app/page.tsx`: minimal placeholder (full UI in Sections 06–07)
+- `lib/types.ts`: Colour, PaletteOptions, Palette interfaces
+- `lib/buildPrompt.ts`: structured prompt with exact count, mood, tone, useCase, audience, theme
+- `lib/parseColours.ts`: fence stripping, array extraction, hex/usage validation, PARSE_FAILED on failure
+- `lib/providers/types.ts`: re-exports AIModel, ProviderFn from @studio/ai-core
+- `lib/providers/index.ts`: generatePalette() — routes to claude/gemini, retries once on PARSE_FAILED
+- `app/api/generate/route.ts`: POST — rate limit, full validation (all 6 fields), 15s AbortController timeout, typed error responses
+
 ### Section 03 — Root showcase site (feat/root-site)
 - `apps/root/package.json`, `next.config.ts`, `tailwind.config.ts`, `tsconfig.json`, `postcss.config.mjs`
 - `app/layout.tsx`: Inter font, dark mode html class, metadata
@@ -72,7 +84,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## In Progress
 
-_Section 05 — PaletteAI API layer (up next)_
+_Section 06 — PaletteAI input + swatches (up next)_
 
 ---
 
