@@ -7,24 +7,24 @@
 
 ## Current Phase
 
-**Phase 0 — Setup** (in progress)
+**Phase 1 — PaletteAI build** (in progress — Section 08 next)
 
 ---
 
 ## Status by Section
 
-| Section | Branch | Status | Notes |
-|---------|--------|--------|-------|
-| 01 — Monorepo scaffold | feat/monorepo-scaffold | ✅ Complete | Merged to develop |
-| 02 — Shared packages | feat/shared-packages | ✅ Complete | Merged to develop |
-| 03 — Root site | feat/root-site | ✅ Complete | Merged to develop |
-| 04 — Shared UI components | feat/shared-ui-components | ✅ Complete | Merged to develop |
-| 05 — PaletteAI API layer | feat/palette-ai-api | ✅ Complete | PR pending → develop |
-| 06 — PaletteAI input + swatches | feat/palette-ai-ui-input-swatches | ✅ Complete | PR pending → develop |
-| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ⬜ Not started | |
-| 08 — Tests + polish | feat/palette-ai-tests-polish | ⬜ Not started | |
-| 09 — Vercel deployment | — | ⬜ Not started | |
-| 10 — Phase 2 features | feat/palette-ai-* | ⬜ Not started | Post-launch |
+| Section                                | Branch                              | Status         | Notes             |
+| -------------------------------------- | ----------------------------------- | -------------- | ----------------- |
+| 01 — Monorepo scaffold                 | feat/monorepo-scaffold              | ✅ Complete    | Merged to develop |
+| 02 — Shared packages                   | feat/shared-packages                | ✅ Complete    | Merged to develop |
+| 03 — Root site                         | feat/root-site                      | ✅ Complete    | Merged to develop |
+| 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop |
+| 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop |
+| 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop |
+| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    |                   |
+| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ⬜ Not started |                   |
+| 09 — Vercel deployment                 | —                                   | ⬜ Not started |                   |
+| 10 — Phase 2 features                  | feat/palette-ai-\*                  | ⬜ Not started | Post-launch       |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -33,42 +33,23 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 ## Completed Work
 
 ### Section 01 — Monorepo scaffold (feat/monorepo-scaffold)
+
 - Created `package.json` (root) with pnpm workspaces, turbo scripts, devDeps
-- Created `pnpm-workspace.yaml` with apps/* and packages/* globs
+- Created `pnpm-workspace.yaml` with apps/_ and packages/_ globs
 - Created `turbo.json` (v2) with build/dev/lint/test tasks + globalEnv passthrough
 - Created `tsconfig.base.json` with strict: true, ES2022, moduleResolution: bundler
 - Updated `.gitignore` to cover node_modules, .next, dist, .turbo, .env*.local, *.tsbuildinfo
 - Created `.env.example` with all four required env var keys
 
 ### Section 02 — Shared packages (feat/shared-packages)
+
 - `packages/tailwind-config`: package.json + tailwind.config.base.ts (darkMode, Inter font, pulse-slow animation, screens)
 - `packages/utils`: cn(), hexToRgb, hexToHSL, getContrastRatio, getTextColour, isWCAGAA, isWCAGAAA, encodeState, decodeState
 - `packages/ui`: scaffold only — package.json, tsconfig, empty index (components added in Section 04)
-- `packages/ai-core`: AIModel/ProviderFn/RateLimitResult types, claudeProvider (claude-haiku-4-5-20251001), geminiProvider (gemini-2.0-flash), checkRateLimit (Vercel KV, 10s cooldown, 100/day cap)
-
-### Section 04 — Shared UI components (feat/shared-ui-components)
-- `Button`: primary/ghost/pill variants, sm/md/lg sizes, loading spinner (Loader2)
-- `PillChip`: radio-style selectable chip, Enter/Space keyboard toggle
-- `CopyButton`: clipboard copy with 1500ms "Copied!" feedback, sm/md sizes
-- `ModelToggle`: Gemini (green dot) / Claude (purple dot) pill toggle, writes to localStorage
-- `Skeleton`: animate-pulse rectangles, configurable count/height/width
-- `ErrorState`: AlertCircle icon, message, optional retry button
-- `AppShell`: sticky topbar (Studio / app title / optional back link), full-height layout
-- Updated `packages/ui/package.json`: added @studio/utils, lucide-react deps
-
-### Section 05 — PaletteAI API layer (feat/palette-ai-api)
-- `apps/palette-ai/`: package.json (nanoid, vitest, @vitejs/plugin-react), next.config.ts, tailwind.config.ts, postcss.config.mjs, tsconfig.json, vitest.config.ts
-- `app/layout.tsx`: Inter font, dark mode, metadata
-- `app/globals.css`: Tailwind directives
-- `app/page.tsx`: minimal placeholder (full UI in Sections 06–07)
-- `lib/types.ts`: Colour, PaletteOptions, Palette interfaces
-- `lib/buildPrompt.ts`: structured prompt with exact count, mood, tone, useCase, audience, theme
-- `lib/parseColours.ts`: fence stripping, array extraction, hex/usage validation, PARSE_FAILED on failure
-- `lib/providers/types.ts`: re-exports AIModel, ProviderFn from @studio/ai-core
-- `lib/providers/index.ts`: generatePalette() — routes to claude/gemini, retries once on PARSE_FAILED
-- `app/api/generate/route.ts`: POST — rate limit, full validation (all 6 fields), 15s AbortController timeout, typed error responses
+- `packages/ai-core`: AIModel/ProviderFn/RateLimitResult types, claudeProvider (claude-haiku-4-5-20251001), geminiProvider (gemini-2.0-flash), checkRateLimit (in-memory, 10s cooldown, 100/day cap — no Upstash, Phase 1 decision)
 
 ### Section 03 — Root showcase site (feat/root-site)
+
 - `apps/root/package.json`, `next.config.ts`, `tailwind.config.ts`, `tsconfig.json`, `postcss.config.mjs`
 - `app/layout.tsx`: Inter font, dark mode html class, metadata
 - `app/page.tsx`: server component — renders HeroSection + AppGallery
@@ -80,87 +61,84 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `components/AppGrid.tsx`: filtered grid of AppCards, empty state
 - `components/AppCard.tsx`: lucide icon, name, tagline, category badge, coming-soon pill, live link
 
+### Section 04 — Shared UI components (feat/shared-ui-components)
+
+- `Button`: primary/ghost/pill variants, sm/md/lg sizes, loading spinner (Loader2)
+- `PillChip`: radio-style selectable chip, Enter/Space keyboard toggle
+- `CopyButton`: clipboard copy with 1500ms "Copied!" feedback, sm/md sizes
+- `ModelToggle`: Gemini (green dot) / Claude (purple dot) pill toggle, writes to localStorage
+- `Skeleton`: animate-pulse rectangles, configurable count/height/width
+- `ErrorState`: AlertCircle icon, message, optional retry button
+- `AppShell`: sticky topbar (Studio / app title / optional back link), full-height layout
+- Updated `packages/ui/package.json`: added @studio/utils, lucide-react deps
+
+### Section 05 — PaletteAI API layer (feat/palette-ai-api)
+
+- `apps/palette-ai/package.json`, `next.config.ts`, `tailwind.config.ts`, `tsconfig.json`
+- `lib/types.ts`: Colour, PaletteOptions, Palette interfaces
+- `lib/buildPrompt.ts`: builds full prompt from all PaletteOptions fields
+- `lib/parseColours.ts`: strips fences, JSON.parse, validates hex + usage, throws PARSE_FAILED
+- `lib/providers/index.ts`: generatePalette() strategy router with one retry on PARSE_FAILED
+- `lib/providers/claudeProvider.ts`: re-exports from @studio/ai-core
+- `lib/providers/geminiProvider.ts`: re-exports from @studio/ai-core
+- `lib/providers/types.ts`: re-exports AIModel, ProviderFn
+- `app/api/generate/route.ts`: POST — rate limit → validate → generatePalette → return JSON
+
 ### Section 06 — PaletteAI input + swatches (feat/palette-ai-ui-input-swatches)
-- `hooks/usePalette.ts`: state (palette, isLoading, error, cooldown), fetch /api/generate, 10s countdown, AbortController 15s timeout
-- `hooks/useHistory.ts`: Palette[] in localStorage "studio:palette-history", max 20, newest-first, SSR-guarded
-- `components/MoodInput.tsx`: textarea + char counter, example mood chips, tone/useCase/audience/theme/count PillChip groups, ModelToggle, Generate button with cooldown countdown
-- `components/BannerStrip.tsx`: full-width flex segments, hover flex:2 transition, selected inset outline, 44px mobile / 56px desktop
-- `components/SwatchCard.tsx`: 80px colour block with usage label overlay (getTextColour), name/hex/CopyButton below, selected violet border
-- `components/LabelList.tsx`: mobile 5-colour layout, colour dot + name + hex + WCAG AA badge + CopyButton per row
-- `components/ScrollCards.tsx`: horizontal scroll-snap row, 110px cards, 56px colour block, name + hex
-- `components/DetailPanel.tsx`: animated max-height expand/collapse, swatch preview, hex/HSL/contrast/usage/rationale, WCAG AA+AAA badges, CopyButton
-- `components/SwatchGrid.tsx`: responsive — desktop flex SwatchCards, mobile 5→LabelList / 8→ScrollCards, inline useIsMobile hook, DetailPanel below
-- `components/SkeletonGrid.tsx`: count Skeleton placeholders in desktop (flex row) and mobile (stacked list) layouts
+
+- `hooks/usePalette.ts`: fetch wrapper with loading, error, 10s cooldown state
+- `hooks/useHistory.ts`: localStorage read/write for palette history (max 20)
+- `components/MoodInput.tsx`: textarea + tone/useCase/audience/theme/count chips + ModelToggle + Generate button
+- `components/BannerStrip.tsx`: expandable colour segments with hover flex grow
+- `components/SwatchCard.tsx`: colour block, name, hex, usage, copy button
+- `components/LabelList.tsx`: mobile 5-colour list with WCAG badges
+- `components/ScrollCards.tsx`: mobile 8-colour horizontal scroll with snap
+- `components/DetailPanel.tsx`: tap-to-expand HSL, contrast, WCAG AA/AAA, rationale
+- `components/SwatchGrid.tsx`: desktop row + mobile layout switch at md breakpoint
+- `components/SkeletonGrid.tsx`: pulsing placeholders matching swatch layout
+
+### Section 07 — PaletteAI page + preview + export (feat/palette-ai-page-preview-export)
+
+- `components/LivePreview.tsx`: fake UI with Card / Dashboard / Landing layout modes; colours applied via inline styles; mode toggle above preview; smooth `transition-colors duration-300` on palette change
+- `components/ExportPanel.tsx`: CSS (hex + HSL toggle) / Tailwind / JSON tabs; per-tab CopyButton; uses `hexToHSL` from `@studio/utils`
+- `components/HistoryDrawer.tsx`: slide-in right drawer (z-50, backdrop overlay); Escape-key close; mini BannerStrip per entry; relative timestamps; model badge (claude/gemini); clear all button
+- `app/page.tsx`: wires LivePreview + ExportPanel + HistoryDrawer; saves each generated palette to history via `useHistory`; history-restore sets activePalette without re-fetching; history button in AppShell topbar shows count badge
+- `packages/ui/src/AppShell.tsx`: added optional `actions?: React.ReactNode` slot to topbar (additive, non-breaking)
 
 ---
-
-## In Progress
-
-_Section 07 — PaletteAI page + preview + export (up next)_
 
 ---
 
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
-- [ ] Confirm Vercel KV region preference
 - [ ] Decide: deploy root and palette-ai to same Vercel team or separate?
 
 ---
 
 ## Decisions Made
 
-| Decision | Rationale | Date |
-|----------|-----------|------|
-| Use pnpm + Turborepo | Industry standard monorepo tooling, fast installs | Setup |
-| Default AI provider: Gemini | Free tier 1500 req/day, preserves Claude credits | Setup |
-| Claude model: claude-haiku-4-5-20251001 | Cheapest Claude, fast, sufficient for JSON generation | Setup |
-| Rate limiter: Vercel KV | In-memory resets on cold starts — KV is persistent | Setup |
-| Mobile 5 colours: banner + labels | Discussed and confirmed by user | Planning |
-| Mobile 8 colours: banner + scroll | Discussed and confirmed by user | Planning |
-| Strategy pattern for AI providers | Extensible — adding OpenAI = 1 file + 1 line | Planning |
-| No auth/DB in Phase 1 and 2 | Portfolio tool, localStorage sufficient | Planning |
-
----
-
-## Files Created So Far
-
-See Completed Work section above for a per-section breakdown.
+| Decision                                     | Rationale                                                                     | Date     |
+| -------------------------------------------- | ----------------------------------------------------------------------------- | -------- |
+| Use pnpm + Turborepo                         | Industry standard monorepo tooling, fast installs                             | Setup    |
+| Default AI provider: Gemini                  | Free tier 1500 req/day, preserves Claude credits                              | Setup    |
+| Claude model: claude-haiku-4-5-20251001      | Cheapest Claude, fast, sufficient for JSON generation                         | Setup    |
+| Rate limiter: in-memory Map only for Phase 1 | Skip Upstash — Anthropic hard cap is the real safety net. Upgrade in Phase 2. | Setup    |
+| Mobile 5 colours: banner + labels            | Discussed and confirmed by user                                               | Planning |
+| Mobile 8 colours: banner + scroll            | Discussed and confirmed by user                                               | Planning |
+| Strategy pattern for AI providers            | Extensible — adding OpenAI = 1 file + 1 line                                  | Planning |
+| No auth/DB in Phase 1 and 2                  | Portfolio tool, localStorage sufficient                                       | Planning |
 
 ---
 
 ## Next Steps
 
-1. Open PR: feat/palette-ai-ui-input-swatches → develop on GitHub
-2. Merge feat/palette-ai-api → develop first (Section 05 dependency)
-3. Run Section 07: PaletteAI page + live preview + export
+1. Checkpoint: verify full flow end to end at http://localhost:3001
+2. Commit and merge feat/palette-ai-page-preview-export → develop
+3. Move to Section 08 — tests + polish
 
 ---
 
 ## Known Issues
 
-_None yet._
-
----
-
-## How to Update This File
-
-After completing a section, update:
-1. The status table — change ⬜ to ✅
-2. Move the section's work to "Completed Work"
-3. Update "Next Steps" to the following section
-4. Add any decisions made during implementation to the decisions table
-5. Add any new open questions that came up
-
-Example completed entry:
-```
-## Completed Work
-
-### Section 01 — Monorepo scaffold (feat/monorepo-scaffold)
-- Created package.json (root) with pnpm workspaces
-- Created pnpm-workspace.yaml
-- Created turbo.json with build/dev/lint/test pipeline
-- Created tsconfig.base.json with strict: true
-- Created .gitignore and .env.example
-- PR merged to develop
-```
+None.

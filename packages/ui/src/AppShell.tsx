@@ -6,10 +6,11 @@ import Link from "next/link";
 interface AppShellProps {
   title: string;
   backHref?: string;
+  actions?: React.ReactNode;
   children: React.ReactNode;
 }
 
-export function AppShell({ title, backHref, children }: AppShellProps) {
+export function AppShell({ title, backHref, actions, children }: AppShellProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
@@ -24,15 +25,20 @@ export function AppShell({ title, backHref, children }: AppShellProps) {
           <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
             {title}
           </span>
-          {backHref && (
-            <Link
-              href={backHref}
-              aria-label="Go back"
-              className="ml-auto flex items-center gap-1 text-sm text-gray-500 transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              Back
-            </Link>
+          {(backHref || actions) && (
+            <div className="ml-auto flex items-center gap-2">
+              {actions}
+              {backHref && (
+                <Link
+                  href={backHref}
+                  aria-label="Go back"
+                  className="flex items-center gap-1 text-sm text-gray-500 transition-colors hover:text-gray-900 dark:hover:text-gray-50"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Back
+                </Link>
+              )}
+            </div>
           )}
         </div>
       </header>
