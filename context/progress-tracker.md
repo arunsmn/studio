@@ -20,7 +20,7 @@
 | 03 — Root site | feat/root-site | ✅ Complete | Merged to develop |
 | 04 — Shared UI components | feat/shared-ui-components | ✅ Complete | Merged to develop |
 | 05 — PaletteAI API layer | feat/palette-ai-api | ✅ Complete | PR pending → develop |
-| 06 — PaletteAI input + swatches | feat/palette-ai-ui-input-swatches | ⬜ Not started | |
+| 06 — PaletteAI input + swatches | feat/palette-ai-ui-input-swatches | ✅ Complete | PR pending → develop |
 | 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ⬜ Not started | |
 | 08 — Tests + polish | feat/palette-ai-tests-polish | ⬜ Not started | |
 | 09 — Vercel deployment | — | ⬜ Not started | |
@@ -80,11 +80,23 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `components/AppGrid.tsx`: filtered grid of AppCards, empty state
 - `components/AppCard.tsx`: lucide icon, name, tagline, category badge, coming-soon pill, live link
 
+### Section 06 — PaletteAI input + swatches (feat/palette-ai-ui-input-swatches)
+- `hooks/usePalette.ts`: state (palette, isLoading, error, cooldown), fetch /api/generate, 10s countdown, AbortController 15s timeout
+- `hooks/useHistory.ts`: Palette[] in localStorage "studio:palette-history", max 20, newest-first, SSR-guarded
+- `components/MoodInput.tsx`: textarea + char counter, example mood chips, tone/useCase/audience/theme/count PillChip groups, ModelToggle, Generate button with cooldown countdown
+- `components/BannerStrip.tsx`: full-width flex segments, hover flex:2 transition, selected inset outline, 44px mobile / 56px desktop
+- `components/SwatchCard.tsx`: 80px colour block with usage label overlay (getTextColour), name/hex/CopyButton below, selected violet border
+- `components/LabelList.tsx`: mobile 5-colour layout, colour dot + name + hex + WCAG AA badge + CopyButton per row
+- `components/ScrollCards.tsx`: horizontal scroll-snap row, 110px cards, 56px colour block, name + hex
+- `components/DetailPanel.tsx`: animated max-height expand/collapse, swatch preview, hex/HSL/contrast/usage/rationale, WCAG AA+AAA badges, CopyButton
+- `components/SwatchGrid.tsx`: responsive — desktop flex SwatchCards, mobile 5→LabelList / 8→ScrollCards, inline useIsMobile hook, DetailPanel below
+- `components/SkeletonGrid.tsx`: count Skeleton placeholders in desktop (flex row) and mobile (stacked list) layouts
+
 ---
 
 ## In Progress
 
-_Section 06 — PaletteAI input + swatches (up next)_
+_Section 07 — PaletteAI page + preview + export (up next)_
 
 ---
 
@@ -119,9 +131,9 @@ See Completed Work section above for a per-section breakdown.
 
 ## Next Steps
 
-1. Merge feat/root-site → develop on GitHub
-2. Run `git checkout develop && git pull origin develop`
-3. Run Section 04: shared UI components
+1. Open PR: feat/palette-ai-ui-input-swatches → develop on GitHub
+2. Merge feat/palette-ai-api → develop first (Section 05 dependency)
+3. Run Section 07: PaletteAI page + live preview + export
 
 ---
 
