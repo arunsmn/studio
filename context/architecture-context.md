@@ -39,7 +39,7 @@ studio/                          ← repo root
 
 - Server-side only — never imported in client components
 - Contains: claudeProvider, geminiProvider, rateLimiter, shared types
-- Models: claude-haiku-4-5-20251001 (Anthropic), gemini-2.0-flash (Google)
+- Models: claude-haiku-4-5-20251001 (Anthropic), gemini-2.5-flash (Google)
 - Rate limiter uses Vercel KV (persistent across serverless cold starts)
 - Strategy pattern: ProviderFn = (prompt: string) => Promise<string>
 
