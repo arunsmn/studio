@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import type { Palette } from "../lib/types";
 
 const STORAGE_KEY = "studio:palette-history";
@@ -13,16 +13,15 @@ interface UseHistoryReturn {
 }
 
 export function useHistory(): UseHistoryReturn {
-  const [history, setHistory] = useState<Palette[]>([]);
-
-  useEffect(() => {
+  const [history, setHistory] = useState<Palette[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      setHistory(stored ? (JSON.parse(stored) as Palette[]) : []);
+      return stored ? (JSON.parse(stored) as Palette[]) : [];
     } catch {
-      setHistory([]);
+      return [];
     }
-  }, []);
+  });
 
   const addToHistory = useCallback((palette: Palette) => {
     setHistory((prev) => {
