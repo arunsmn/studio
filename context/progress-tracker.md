@@ -24,7 +24,8 @@
 | 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    |                   |
 | 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    |                   |
 | 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    |                   |
-| 10 — Phase 2 features                  | feat/palette-ai-\*                  | ⬜ Not started | Post-launch       |
+| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    |                   |
+| 10b — Image upload                     | feat/palette-ai-image-upload        | ⬜ Not started |                   |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -133,6 +134,19 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Section 10a — Shareable URL (feat/palette-ai-shareable-url)
+
+- `apps/palette-ai/components/ShareToast.tsx`: fixed bottom-center toast, slide-up CSS transition, `aria-live="polite"`, auto-hides after 2s
+- `apps/palette-ai/app/page.tsx`:
+  - Mount `useEffect` decodes URL hash with `decodeState<Palette>` and restores `activePalette` + `lastCount` without an API call
+  - Palette generation `useEffect` calls `encodeState(full)` and writes to `window.location.hash` after `addToHistory`
+  - `handleShare` writes `window.location.href` to clipboard and triggers the toast
+  - Share button (Share2 icon + "Share" label) added to AppShell `actions` slot alongside existing history button
+- `encodeState` / `decodeState` from `@studio/utils` — no new utility code needed
+- Build: `pnpm build --filter=@studio/palette-ai` passes with zero TypeScript errors
+
+---
+
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
@@ -157,7 +171,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Execute Section 10 — Phase 2 features
+1. Implement Section 10b — Image upload (`feat/palette-ai-image-upload`)
 
 ---
 
