@@ -27,7 +27,7 @@ export function useHistory(): UseHistoryReturn {
     setHistory((prev) => {
       const next = [palette, ...prev.filter((p) => p.id !== palette.id)].slice(
         0,
-        MAX_HISTORY
+        MAX_HISTORY,
       );
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       return next;
