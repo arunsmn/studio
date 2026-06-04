@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, PillChip, ModelToggle } from "@studio/ui";
 import { cn } from "@studio/utils";
 import type { AIModel } from "@studio/ai-core";
@@ -52,12 +52,6 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function initialModel(): AIModel {
-  if (typeof window === "undefined") return "gemini";
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored === "claude" ? "claude" : "gemini";
-}
-
 export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
   const [mood, setMood] = useState("");
   const [tone, setTone] = useState<PaletteOptions["tone"]>("warm");
@@ -65,7 +59,12 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
   const [audience, setAudience] = useState<PaletteOptions["audience"]>("professionals");
   const [theme, setTheme] = useState<PaletteOptions["theme"]>("light");
   const [count, setCount] = useState<PaletteOptions["count"]>(5);
-  const [model, setModel] = useState<AIModel>(initialModel);
+  const [model, setModel] = useState<AIModel>("gemini");
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "claude") setModel("claude");
+  }, []);
 
   const isDisabled = isLoading || cooldown > 0 || mood.trim().length < 2;
 
