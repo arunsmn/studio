@@ -1,46 +1,43 @@
-import { kv } from "@vercel/kv";
 import type { RateLimitResult } from "./types";
 
-const COOLDOWN_SECONDS = 10;
+const COOLDOWN_MS = 10_000;
 const DAILY_GLOBAL_CAP = 100;
 
-function getDailyKey(): string {
-  return `studio:rate:global:${new Date().toISOString().slice(0, 10)}`;
+interface IpEntry {
+  unlocksAt: number;
 }
 
-function secondsUntilMidnight(): number {
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setDate(midnight.getDate() + 1);
-  midnight.setHours(0, 0, 0, 0);
-  return Math.ceil((midnight.getTime() - now.getTime()) / 1000);
+const ipMap = new Map<string, IpEntry>();
+const dailyCount = { date: "", count: 0 };
+
+function todayKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getDailyCount(): number {
+  const today = todayKey();
+  if (dailyCount.date !== today) {
+    dailyCount.date = today;
+    dailyCount.count = 0;
+  }
+  return dailyCount.count;
 }
 
 export async function checkRateLimit(ip: string): Promise<RateLimitResult> {
-  const ipKey = `studio:rate:ip:${ip}`;
-  const dailyKey = getDailyKey();
+  const now = Date.now();
 
-  const [ipTtl, dailyCount] = await Promise.all([
-    kv.ttl(ipKey),
-    kv.get<number>(dailyKey),
-  ]);
-
-  if (ipTtl > 0) {
-    return { allowed: false, waitSeconds: ipTtl };
+  const entry = ipMap.get(ip);
+  if (entry && entry.unlocksAt > now) {
+    const waitSeconds = Math.ceil((entry.unlocksAt - now) / 1000);
+    return { allowed: false, waitSeconds };
   }
 
-  if (dailyCount !== null && dailyCount >= DAILY_GLOBAL_CAP) {
+  if (getDailyCount() >= DAILY_GLOBAL_CAP) {
     return { allowed: false, waitSeconds: 0 };
   }
 
-  await Promise.all([
-    kv.set(ipKey, 1, { ex: COOLDOWN_SECONDS }),
-    kv.incr(dailyKey),
-  ]);
-
-  if (dailyCount === null) {
-    await kv.expire(dailyKey, secondsUntilMidnight());
-  }
+  ipMap.set(ip, { unlocksAt: now + COOLDOWN_MS });
+  dailyCount.count += 1;
 
   return { allowed: true, waitSeconds: 0 };
 }

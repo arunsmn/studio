@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Phase 1 — PaletteAI build** (in progress — Section 09 next)
+**Phase 1 — PaletteAI build** (complete — Phase 2 features next)
 
 ---
 
@@ -23,7 +23,7 @@
 | 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop |
 | 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    |                   |
 | 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    |                   |
-| 09 — Vercel deployment                 | —                                   | ⬜ Not started |                   |
+| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    |                   |
 | 10 — Phase 2 features                  | feat/palette-ai-\*                  | ⬜ Not started | Post-launch       |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
@@ -107,6 +107,18 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Section 09 — Vercel deployment (feat/vercel-deployment)
+
+- `apps/root/vercel.json`: framework `nextjs`, buildCommand `cd ../.. && pnpm build --filter=@studio/root`, installCommand `cd ../.. && pnpm install --frozen-lockfile`, outputDirectory `.next`
+- `apps/palette-ai/vercel.json`: same pattern with `--filter=@studio/palette-ai`
+- Both files version-control the monorepo build overrides; Vercel dashboard Root Directory must be set to the respective `apps/<name>` folder per project
+- `packages/ai-core/src/rateLimiter.ts` corrected to in-memory Map (removed `@vercel/kv` — Phase 2 decision per architecture-context.md)
+- `@vercel/kv` removed from `packages/ai-core/package.json` and `apps/palette-ai/package.json`
+- Env vars for `apps/palette-ai`: `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`
+- Env vars for `apps/root`: none
+
+---
+
 ### Section 08 — Tests + polish (feat/palette-ai-tests-polish)
 
 - `vitest.config.ts`: updated with `resolve.alias` for `@studio/ui`, `@studio/utils`, `@studio/ai-core`; added `jsdom` to devDependencies
@@ -145,7 +157,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Execute Section 09 — Vercel deployment
+1. Execute Section 10 — Phase 2 features
 
 ---
 
