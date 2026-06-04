@@ -27,14 +27,26 @@ export default function Home() {
   const [shareVisible, setShareVisible] = useState(false);
   const pendingPaletteRef = useRef<Omit<Palette, "colours"> | null>(null);
 
+  // Restore palette from the URL hash on mount and whenever the hash changes
+  // (same-tab navigation, back/forward). hashchange covers address-bar paste;
+  // popstate covers browser back/forward.
   useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (!hash) return;
-    const restored = decodeState<Palette>(hash);
-    if (restored) {
-      setActivePalette(restored.colours);
-      setLastCount(restored.colours.length);
+    function syncFromHash(): void {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+      const restored = decodeState<Palette>(hash);
+      if (restored?.colours) {
+        setActivePalette(restored.colours);
+        setLastCount(restored.colours.length);
+      }
     }
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    window.addEventListener("popstate", syncFromHash);
+    return () => {
+      window.removeEventListener("hashchange", syncFromHash);
+      window.removeEventListener("popstate", syncFromHash);
+    };
   }, []);
 
   useEffect(() => {
@@ -74,6 +86,7 @@ export default function Home() {
   function handleHistorySelect(palette: Palette) {
     setActivePalette(palette.colours);
     setLastCount(palette.colours.length);
+    window.location.hash = encodeState(palette);
   }
 
   return (

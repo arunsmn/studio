@@ -14,12 +14,20 @@ export function SwatchCard({ colour, selected, onClick }: SwatchCardProps) {
   const textColour = getTextColour(colour.hex);
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
       aria-label={`${colour.name}, ${colour.hex}`}
       aria-pressed={selected}
       className={cn(
-        "flex min-w-[100px] flex-1 flex-col overflow-hidden rounded-xl border transition-colors duration-150",
+        "flex min-w-[100px] flex-1 cursor-pointer flex-col overflow-hidden rounded-xl border transition-colors duration-150",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
         selected
           ? "border-[1.5px] border-violet-500"
@@ -53,6 +61,6 @@ export function SwatchCard({ colour, selected, onClick }: SwatchCardProps) {
           <CopyButton value={colour.hex} size="sm" />
         </div>
       </div>
-    </button>
+    </div>
   );
 }
