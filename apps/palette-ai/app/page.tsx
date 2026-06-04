@@ -74,6 +74,7 @@ export default function Home() {
   function handleHistorySelect(palette: Palette) {
     setActivePalette(palette.colours);
     setLastCount(palette.colours.length);
+    window.location.hash = encodeState(palette);
   }
 
   return (
