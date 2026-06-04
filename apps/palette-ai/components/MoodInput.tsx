@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, PillChip, ModelToggle } from "@studio/ui";
 import { cn } from "@studio/utils";
 import type { AIModel } from "@studio/ai-core";
@@ -66,10 +66,12 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
     useState<PaletteOptions["audience"]>("professionals");
   const [theme, setTheme] = useState<PaletteOptions["theme"]>("light");
   const [count, setCount] = useState<PaletteOptions["count"]>(5);
-  const [model, setModel] = useState<AIModel>(() => {
-    if (typeof window === "undefined") return "gemini";
-    return localStorage.getItem(STORAGE_KEY) === "claude" ? "claude" : "gemini";
-  });
+  const [model, setModel] = useState<AIModel>("gemini");
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "claude") setModel("claude");
+  }, []);
 
   const isDisabled = isLoading || cooldown > 0 || mood.trim().length < 2;
 
