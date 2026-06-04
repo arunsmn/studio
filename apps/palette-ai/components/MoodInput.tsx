@@ -86,6 +86,7 @@ export function MoodInput({
 
   function handleGenerate() {
     if (isDisabled) return;
+    setImagePreview(null);
     onGenerate({
       mood: mood.trim(),
       tone,
