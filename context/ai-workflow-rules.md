@@ -25,6 +25,7 @@ When given a task, do this before writing any code:
 - Every component must be accessible (see ui-context.md accessibility rules)
 - Every API route must have input validation and rate limiting
 - After delivering a section, state what was created and what to run next
+- Updating progress-tracker.md is part of delivery — a section is not complete until the tracker reflects it. Do this automatically, without being asked.
 
 ## File Generation Format
 
@@ -43,6 +44,7 @@ and ask which file to prioritise.
 ## Update Rules for Context Files
 
 After completing a section of work, update `context/progress-tracker.md`:
+
 - Move completed items from "In Progress" to "Completed"
 - Add any new open questions that emerged during implementation
 - Update "Next Steps" to reflect what comes after the current section
@@ -65,11 +67,13 @@ before continuing with the implementation.
 ## Handling Ambiguity
 
 If a task conflicts with an existing context file:
+
 1. Point out the conflict explicitly
 2. Ask which takes priority
 3. Do not guess and implement — wait for clarification
 
 If a task is entirely clear:
+
 1. State which files you will create
 2. Generate them in order
 3. State the checkpoint command to verify the work
@@ -83,9 +87,10 @@ refactor/[what-changed] ← refactor with no behaviour change
 ```
 
 Always remind the user to:
+
 1. `git checkout develop && git pull origin develop`
 2. `git checkout -b feat/[branch-name]`
-before starting each new section.
+   before starting each new section.
 
 ## Session Continuity
 
