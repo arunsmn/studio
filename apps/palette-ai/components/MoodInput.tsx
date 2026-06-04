@@ -22,7 +22,13 @@ const EXAMPLE_MOODS = [
   "neon city",
 ];
 
-const TONES: PaletteOptions["tone"][] = ["warm", "cool", "bold", "muted", "vibrant"];
+const TONES: PaletteOptions["tone"][] = [
+  "warm",
+  "cool",
+  "bold",
+  "muted",
+  "vibrant",
+];
 
 const USE_CASES: { value: PaletteOptions["useCase"]; label: string }[] = [
   { value: "web-app", label: "web app" },
@@ -56,7 +62,8 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
   const [mood, setMood] = useState("");
   const [tone, setTone] = useState<PaletteOptions["tone"]>("warm");
   const [useCase, setUseCase] = useState<PaletteOptions["useCase"]>("web-app");
-  const [audience, setAudience] = useState<PaletteOptions["audience"]>("professionals");
+  const [audience, setAudience] =
+    useState<PaletteOptions["audience"]>("professionals");
   const [theme, setTheme] = useState<PaletteOptions["theme"]>("light");
   const [count, setCount] = useState<PaletteOptions["count"]>(5);
   const [model, setModel] = useState<AIModel>("gemini");
@@ -70,7 +77,15 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
 
   function handleGenerate() {
     if (isDisabled) return;
-    onGenerate({ mood: mood.trim(), tone, useCase, audience, theme, count, model });
+    onGenerate({
+      mood: mood.trim(),
+      tone,
+      useCase,
+      audience,
+      theme,
+      count,
+      model,
+    });
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -92,7 +107,7 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
                 "rounded-full border border-gray-200 px-2.5 py-1 text-xs text-gray-500 transition-colors duration-150",
                 "hover:border-gray-400 hover:text-gray-700",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
-                "dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-300"
+                "dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-300",
               )}
             >
               {example}
@@ -109,7 +124,7 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
             className={cn(
               "w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm",
               "focus:outline-none focus:ring-2 focus:ring-violet-500",
-              "dark:border-gray-700 dark:bg-gray-900 dark:text-gray-50 dark:placeholder-gray-500"
+              "dark:border-gray-700 dark:bg-gray-900 dark:text-gray-50 dark:placeholder-gray-500",
             )}
           />
           <span className="absolute bottom-2 right-3 text-xs text-gray-400">
@@ -120,7 +135,11 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
 
       <div>
         <SectionLabel>tone</SectionLabel>
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Tone">
+        <div
+          className="flex flex-wrap gap-2"
+          role="radiogroup"
+          aria-label="Tone"
+        >
           {TONES.map((t) => (
             <PillChip
               key={t}
@@ -134,7 +153,11 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
 
       <div>
         <SectionLabel>use case</SectionLabel>
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Use case">
+        <div
+          className="flex flex-wrap gap-2"
+          role="radiogroup"
+          aria-label="Use case"
+        >
           {USE_CASES.map(({ value, label }) => (
             <PillChip
               key={value}
@@ -148,7 +171,11 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
 
       <div>
         <SectionLabel>audience</SectionLabel>
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Audience">
+        <div
+          className="flex flex-wrap gap-2"
+          role="radiogroup"
+          aria-label="Audience"
+        >
           {AUDIENCES.map(({ value, label }) => (
             <PillChip
               key={value}
@@ -176,7 +203,11 @@ export function MoodInput({ onGenerate, isLoading, cooldown }: MoodInputProps) {
         </div>
         <div>
           <SectionLabel>colours</SectionLabel>
-          <div className="flex gap-2" role="radiogroup" aria-label="Colour count">
+          <div
+            className="flex gap-2"
+            role="radiogroup"
+            aria-label="Colour count"
+          >
             {COUNTS.map((c) => (
               <PillChip
                 key={c}

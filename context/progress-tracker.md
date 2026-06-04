@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Phase 1 — PaletteAI build** (in progress — Section 08 next)
+**Phase 1 — PaletteAI build** (in progress — Section 09 next)
 
 ---
 
@@ -22,7 +22,7 @@
 | 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop |
 | 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop |
 | 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    |                   |
-| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ⬜ Not started |                   |
+| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    |                   |
 | 09 — Vercel deployment                 | —                                   | ⬜ Not started |                   |
 | 10 — Phase 2 features                  | feat/palette-ai-\*                  | ⬜ Not started | Post-launch       |
 
@@ -107,6 +107,18 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Section 08 — Tests + polish (feat/palette-ai-tests-polish)
+
+- `vitest.config.ts`: updated with `resolve.alias` for `@studio/ui`, `@studio/utils`, `@studio/ai-core`; added `jsdom` to devDependencies
+- `__tests__/parseColours.test.ts`: 18 tests — happy path, markdown fence stripping, prose stripping, count mismatch, invalid hex, invalid usage, missing fields, malformed JSON, null items
+- `__tests__/buildPrompt.test.ts`: 10 tests — mood presence, all fields, JSON-only instruction, all usage values, count boundaries (3/5/8), edge cases
+- `__tests__/generatePalette.test.ts`: 8 tests — gemini/claude routing, prompt pass-through, retry on PARSE_FAILED, retry suffix, both-fail propagation, shape validation, non-parse error propagation; providers mocked with `vi.mock`
+- `__tests__/colourUtils.test.ts`: 23 tests — hexToRgb (5), hexToHSL (4), getContrastRatio (3), getTextColour (4), isWCAGAA (3), isWCAGAAA (4)
+- `__tests__/urlState.test.ts`: 10 tests — round-trip (4), produces valid base64, malformed inputs (3), boundary (2)
+- `hooks/useHistory.ts`: replaced `useEffect` + `setHistory` with lazy `useState` initializer per code-standards pattern; removes the post-mount history flash in the count badge
+- `components/MoodInput.tsx`: replaced `useEffect` localStorage read + `setModel` with lazy `useState` initializer; removed `useEffect` import
+- Total: **69 tests, 5 files, all passing**
+
 ---
 
 ## Open Questions
@@ -133,7 +145,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Execute Section 08 — tests + polish
+1. Execute Section 09 — Vercel deployment
 
 ---
 
