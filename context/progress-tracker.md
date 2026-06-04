@@ -133,9 +133,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Checkpoint: verify full flow end to end at http://localhost:3001
-2. Commit and merge feat/palette-ai-page-preview-export → develop
-3. Move to Section 08 — tests + polish
+1. Execute Section 08 — tests + polish
 
 ---
 
