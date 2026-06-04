@@ -21,13 +21,21 @@ export function AppCard({ app }: AppCardProps) {
   const card = (
     <div
       className={cn(
-        "rounded-xl border border-gray-200 bg-white p-5 transition-colors duration-150",
+        "rounded-xl border border-gray-200 bg-white transition-colors duration-150 overflow-hidden",
         "dark:border-gray-800 dark:bg-gray-900",
         isLive
           ? "hover:border-gray-400 dark:hover:border-gray-600"
           : "opacity-75"
       )}
     >
+      {app.swatches && app.swatches.length > 0 && (
+        <div className="flex h-10 w-full">
+          {app.swatches.map((hex) => (
+            <div key={hex} className="flex-1" style={{ background: hex }} />
+          ))}
+        </div>
+      )}
+      <div className="p-5">
       <div className="mb-4 flex items-start justify-between">
         <div
           className={cn(
@@ -50,6 +58,7 @@ export function AppCard({ app }: AppCardProps) {
       <span className="mt-3 inline-block text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500">
         {app.category}
       </span>
+      </div>
     </div>
   );
 
