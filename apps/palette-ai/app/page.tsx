@@ -14,6 +14,7 @@ import { HistoryDrawer } from "../components/HistoryDrawer";
 import { ShareToast } from "../components/ShareToast";
 import { usePalette } from "../hooks/usePalette";
 import { useHistory } from "../hooks/useHistory";
+import type { AIModel } from "@studio/ai-core";
 import type { Colour, Palette, PaletteOptions } from "../lib/types";
 
 export default function Home() {
@@ -35,6 +36,11 @@ export default function Home() {
   const [shareVisible, setShareVisible] = useState(false);
   const pendingPaletteRef = useRef<Omit<Palette, "colours"> | null>(null);
   const lastImagePaletteIdRef = useRef<string | null>(null);
+  const lastImageUploadRef = useRef<{
+    file: File;
+    count: 3 | 5 | 6 | 8;
+    model: AIModel;
+  } | null>(null);
 
   // Restore palette from the URL hash on mount and whenever the hash changes
   // (same-tab navigation, back/forward). hashchange covers address-bar paste;
@@ -95,6 +101,15 @@ export default function Home() {
     [generate]
   );
 
+  function handleGenerateFromImage(
+    file: File,
+    count: 3 | 5 | 6 | 8,
+    model: AIModel
+  ): void {
+    lastImageUploadRef.current = { file, count, model };
+    void generateFromImage(file, count, model);
+  }
+
   function handleShare(): void {
     void navigator.clipboard.writeText(window.location.href);
     setShareVisible(true);
@@ -144,7 +159,7 @@ export default function Home() {
         <div className="w-full md:w-[400px] md:flex-shrink-0">
           <MoodInput
             onGenerate={handleGenerate}
-            onGenerateFromImage={generateFromImage}
+            onGenerateFromImage={handleGenerateFromImage}
             isLoading={isLoading}
             cooldown={cooldown}
           />
@@ -156,7 +171,16 @@ export default function Home() {
           {!isLoading && error && (
             <ErrorState
               message={error}
-              onRetry={lastOptions ? () => generate(lastOptions) : undefined}
+              onRetry={
+                lastOptions
+                  ? () => generate(lastOptions)
+                  : lastImageUploadRef.current
+                  ? () => {
+                      const { file, count, model } = lastImageUploadRef.current!;
+                      void generateFromImage(file, count, model);
+                    }
+                  : undefined
+              }
             />
           )}
 
