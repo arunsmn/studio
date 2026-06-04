@@ -1,18 +1,26 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import type { Colour, PaletteOptions } from "../lib/types";
+import type { AIModel, ImageMimeType } from "@studio/ai-core";
+import type { Colour, Palette, PaletteOptions } from "../lib/types";
 
 interface UsePaletteReturn {
   palette: Colour[] | null;
+  imagePalette: Palette | null;
   isLoading: boolean;
   error: string | null;
   cooldown: number;
   generate: (options: PaletteOptions) => Promise<void>;
+  generateFromImage: (
+    file: File,
+    count: 3 | 5 | 6 | 8,
+    model: AIModel
+  ) => Promise<void>;
 }
 
 export function usePalette(): UsePaletteReturn {
   const [palette, setPalette] = useState<Colour[] | null>(null);
+  const [imagePalette, setImagePalette] = useState<Palette | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cooldown, setCooldown] = useState(0);
@@ -78,5 +86,69 @@ export function usePalette(): UsePaletteReturn {
     }
   }, []);
 
-  return { palette, isLoading, error, cooldown, generate };
+  async function generateFromImage(
+    file: File,
+    count: 3 | 5 | 6 | 8,
+    model: AIModel
+  ): Promise<void> {
+    if (cooldown > 0) return;
+    setIsLoading(true);
+    setError(null);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    await new Promise<void>((resolve, reject) => {
+      reader.onload = () => resolve();
+      reader.onerror = () => reject(reader.error);
+    });
+
+    const dataUrl = reader.result as string;
+    const [meta, imageBase64] = dataUrl.split(",");
+    const mimeType = meta.split(":")[1].split(";")[0] as ImageMimeType;
+
+    try {
+      const res = await fetch("/api/generate-from-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageBase64, mimeType, count, model }),
+      });
+
+      if (res.status === 429) {
+        const data = (await res.json()) as { error: string; waitSeconds: number };
+        setError(data.error);
+        startCooldown();
+        return;
+      }
+
+      if (!res.ok) {
+        const data = (await res.json()) as { error: string };
+        setError(data.error ?? "Something went wrong.");
+        return;
+      }
+
+      const data = (await res.json()) as { colours: Colour[] };
+      setImagePalette({
+        id: crypto.randomUUID(),
+        mood: "from image",
+        colours: data.colours,
+        model,
+        createdAt: Date.now(),
+      });
+      startCooldown();
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return {
+    palette,
+    imagePalette,
+    isLoading,
+    error,
+    cooldown,
+    generate,
+    generateFromImage,
+  };
 }

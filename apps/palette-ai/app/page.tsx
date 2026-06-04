@@ -17,7 +17,15 @@ import { useHistory } from "../hooks/useHistory";
 import type { Colour, Palette, PaletteOptions } from "../lib/types";
 
 export default function Home() {
-  const { palette: generatedPalette, isLoading, error, cooldown, generate } = usePalette();
+  const {
+    palette: generatedPalette,
+    imagePalette,
+    isLoading,
+    error,
+    cooldown,
+    generate,
+    generateFromImage,
+  } = usePalette();
   const { history, addToHistory, clearHistory } = useHistory();
 
   const [activePalette, setActivePalette] = useState<Colour[] | null>(null);
@@ -26,6 +34,7 @@ export default function Home() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [shareVisible, setShareVisible] = useState(false);
   const pendingPaletteRef = useRef<Omit<Palette, "colours"> | null>(null);
+  const lastImagePaletteIdRef = useRef<string | null>(null);
 
   // Restore palette from the URL hash on mount and whenever the hash changes
   // (same-tab navigation, back/forward). hashchange covers address-bar paste;
@@ -61,6 +70,15 @@ export default function Home() {
       pendingPaletteRef.current = null;
     }
   }, [generatedPalette, addToHistory]);
+
+  useEffect(() => {
+    if (!imagePalette || imagePalette.id === lastImagePaletteIdRef.current) return;
+    lastImagePaletteIdRef.current = imagePalette.id;
+    addToHistory(imagePalette);
+    window.location.hash = encodeState(imagePalette);
+    setActivePalette(imagePalette.colours);
+    setLastCount(imagePalette.colours.length);
+  }, [imagePalette, addToHistory]);
 
   const handleGenerate = useCallback(
     async (options: PaletteOptions) => {
@@ -125,6 +143,7 @@ export default function Home() {
         <div className="w-full md:w-[400px] md:flex-shrink-0">
           <MoodInput
             onGenerate={handleGenerate}
+            onGenerateFromImage={generateFromImage}
             isLoading={isLoading}
             cooldown={cooldown}
           />
