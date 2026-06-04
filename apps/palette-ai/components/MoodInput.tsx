@@ -119,7 +119,7 @@ export function MoodInput({
   return (
     <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
       <div>
-        <SectionLabel>mood</SectionLabel>
+        <SectionLabel>describe a mood or upload a photo</SectionLabel>
         <div className="mb-2 flex flex-wrap gap-1.5">
           {EXAMPLE_MOODS.map((example) => (
             <button
@@ -154,7 +154,13 @@ export function MoodInput({
           </span>
         </div>
 
-        <div className="mt-2">
+        <div className="relative my-3 flex items-center gap-3">
+          <div className="flex-1 border-t border-gray-200 dark:border-gray-700" />
+          <span className="text-xs text-gray-400 dark:text-gray-500">or</span>
+          <div className="flex-1 border-t border-gray-200 dark:border-gray-700" />
+        </div>
+
+        <div>
           <input
             ref={fileInputRef}
             type="file"
@@ -167,17 +173,17 @@ export function MoodInput({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isLoading}
-            aria-label="Upload image"
+            aria-label="Upload an image to extract a palette"
             className={cn(
-              "flex items-center gap-1.5 rounded border px-2 py-1 text-xs transition-colors",
-              "border-gray-200 text-gray-500 hover:border-gray-400 hover:text-gray-900",
+              "flex w-full items-center justify-center gap-2 rounded-lg border border-dashed px-3 py-3 text-sm transition-colors duration-150",
+              "border-gray-300 text-gray-500 hover:border-violet-400 hover:text-violet-600 hover:bg-violet-50",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
-              "dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-50",
+              "dark:border-gray-600 dark:text-gray-400 dark:hover:border-violet-500 dark:hover:text-violet-400 dark:hover:bg-violet-950/20",
               "disabled:cursor-not-allowed disabled:opacity-50",
             )}
           >
             <ImageIcon className="h-4 w-4" />
-            <span>Use image</span>
+            <span>Upload a photo to extract colours</span>
           </button>
 
           {imagePreview && isLoading && (

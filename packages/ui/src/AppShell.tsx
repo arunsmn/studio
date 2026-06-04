@@ -5,18 +5,19 @@ import Link from "next/link";
 
 interface AppShellProps {
   title: string;
+  studioHref?: string;
   backHref?: string;
   actions?: React.ReactNode;
   children: React.ReactNode;
 }
 
-export function AppShell({ title, backHref, actions, children }: AppShellProps) {
+export function AppShell({ title, studioHref = "/", backHref, actions, children }: AppShellProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4">
           <Link
-            href="/"
+            href={studioHref}
             className="text-sm font-semibold text-gray-900 transition-colors hover:text-violet-600 dark:text-gray-50 dark:hover:text-violet-400"
           >
             Studio

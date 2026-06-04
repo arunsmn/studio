@@ -110,6 +110,7 @@ export default function Home() {
   return (
     <AppShell
       title="PaletteAI"
+      studioHref="https://studio-root.vercel.app/"
       actions={
         <>
           <button
