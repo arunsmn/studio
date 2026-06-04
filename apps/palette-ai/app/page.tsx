@@ -28,13 +28,19 @@ export default function Home() {
   const pendingPaletteRef = useRef<Omit<Palette, "colours"> | null>(null);
 
   useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (!hash) return;
-    const restored = decodeState<Palette>(hash);
-    if (restored) {
-      setActivePalette(restored.colours);
-      setLastCount(restored.colours.length);
+    function restoreFromHash(): void {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+      const restored = decodeState<Palette>(hash);
+      if (restored) {
+        setActivePalette(restored.colours);
+        setLastCount(restored.colours.length);
+      }
     }
+
+    restoreFromHash();
+    window.addEventListener("hashchange", restoreFromHash);
+    return () => window.removeEventListener("hashchange", restoreFromHash);
   }, []);
 
   useEffect(() => {
