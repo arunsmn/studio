@@ -11,7 +11,7 @@ studio/                          ← repo root
 ├── pnpm-workspace.yaml          ← workspaces: ["apps/*", "packages/*"]
 ├── turbo.json                   ← Turborepo pipeline
 ├── tsconfig.base.json           ← base TS config all apps extend
-├── .env.local                   ← ANTHROPIC_API_KEY, GEMINI_API_KEY, KV_*
+├── .env.local                   ← ANTHROPIC_API_KEY, GEMINI_API_KEY (KV vars not needed until Phase 2)
 │
 ├── apps/
 │   ├── root/                    ← @studio/root — showcase landing site
@@ -94,9 +94,10 @@ apps/[app-name]/
 4. **Each app is independently deployable.** No app imports from
    another app. Only cross-cutting packages are shared.
 
-5. **In-memory state does not work on Vercel.** Module-level variables
-   reset on cold starts. Use Vercel KV for any state that must persist
-   across requests (rate limiting, counters).
+5. **In-memory state does not work on Vercel** across cold starts.
+   Phase 1 uses in-memory Map for rate limiting — acceptable for
+   portfolio traffic. Upgrade to Upstash Redis in Phase 2.
+   Do NOT add Vercel KV or Upstash as a Phase 1 dependency.
 
 6. **buildPrompt and parseColours are app-specific.** They are not
    shared packages because each app has different AI output schemas.
