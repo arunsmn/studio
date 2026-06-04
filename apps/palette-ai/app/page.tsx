@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 import { nanoid } from "nanoid";
 import { AppShell, ErrorState, Button } from "@studio/ui";
 import { Clock, Share2 } from "lucide-react";
@@ -16,6 +16,20 @@ import { usePalette } from "../hooks/usePalette";
 import { useHistory } from "../hooks/useHistory";
 import type { Colour, Palette, PaletteOptions } from "../lib/types";
 
+// Stable references required by useSyncExternalStore — defined outside the component.
+function subscribeToHash(onStoreChange: () => void): () => void {
+  window.addEventListener("hashchange", onStoreChange);
+  window.addEventListener("popstate", onStoreChange);
+  return () => {
+    window.removeEventListener("hashchange", onStoreChange);
+    window.removeEventListener("popstate", onStoreChange);
+  };
+}
+
+function getHashSnapshot(): string {
+  return window.location.hash.slice(1);
+}
+
 export default function Home() {
   const { palette: generatedPalette, isLoading, error, cooldown, generate } = usePalette();
   const { history, addToHistory, clearHistory } = useHistory();
@@ -26,22 +40,26 @@ export default function Home() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [shareVisible, setShareVisible] = useState(false);
   const pendingPaletteRef = useRef<Omit<Palette, "colours"> | null>(null);
+  // Tracks hashes we wrote ourselves so the restore effect can skip them.
+  const lastWrittenHashRef = useRef<string | null>(null);
 
+  // Subscribe to the URL hash as an external store. Reads synchronously on
+  // first render (no useEffect delay) and re-renders whenever hashchange or
+  // popstate fires — covering both same-tab hash navigation and back/forward.
+  // The server snapshot is "" because the hash is never sent to the server.
+  const urlHash = useSyncExternalStore(subscribeToHash, getHashSnapshot, () => "");
+
+  // Restore palette whenever the hash changes from an external source
+  // (page load, paste in address bar, back/forward).
+  // Skips hashes we wrote ourselves to avoid a redundant re-decode.
   useEffect(() => {
-    function restoreFromHash(): void {
-      const hash = window.location.hash.slice(1);
-      if (!hash) return;
-      const restored = decodeState<Palette>(hash);
-      if (restored) {
-        setActivePalette(restored.colours);
-        setLastCount(restored.colours.length);
-      }
+    if (!urlHash || urlHash === lastWrittenHashRef.current) return;
+    const restored = decodeState<Palette>(urlHash);
+    if (restored) {
+      setActivePalette(restored.colours);
+      setLastCount(restored.colours.length);
     }
-
-    restoreFromHash();
-    window.addEventListener("hashchange", restoreFromHash);
-    return () => window.removeEventListener("hashchange", restoreFromHash);
-  }, []);
+  }, [urlHash]);
 
   useEffect(() => {
     if (generatedPalette && pendingPaletteRef.current) {
@@ -50,7 +68,9 @@ export default function Home() {
         colours: generatedPalette,
       };
       addToHistory(full);
-      window.location.hash = encodeState(full);
+      const encoded = encodeState(full);
+      lastWrittenHashRef.current = encoded;
+      window.location.hash = encoded;
       setActivePalette(generatedPalette);
       pendingPaletteRef.current = null;
     }
@@ -80,7 +100,9 @@ export default function Home() {
   function handleHistorySelect(palette: Palette) {
     setActivePalette(palette.colours);
     setLastCount(palette.colours.length);
-    window.location.hash = encodeState(palette);
+    const encoded = encodeState(palette);
+    lastWrittenHashRef.current = encoded;
+    window.location.hash = encoded;
   }
 
   return (
