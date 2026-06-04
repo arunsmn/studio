@@ -15,7 +15,7 @@ export const APPS: AppEntry[] = [
     name: "PaletteAI",
     tagline: "Describe a mood. Get a colour palette.",
     category: "tool",
-    status: "coming-soon",
+    status: "live",
     url: "https://studio-palette-ai.vercel.app/",
     color: "bg-violet-100",
     icon: "Palette",
