@@ -86,10 +86,7 @@ export default function Home() {
   function handleHistorySelect(palette: Palette) {
     setActivePalette(palette.colours);
     setLastCount(palette.colours.length);
-    const encoded = encodeState(palette);
-    console.log("encoded:", encoded);
-    window.location.hash = encoded;
-    console.log("hash after set:", window.location.hash);
+    window.location.hash = encodeState(palette);
   }
 
   return (
