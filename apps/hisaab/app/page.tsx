@@ -78,6 +78,7 @@ export default function HisaabPage() {
         <CurrencyPickerModal
           onSelect={saveCurrency}
           onClose={closePicker}
+          isDismissible={currency !== null}
         />
       )}
     </div>

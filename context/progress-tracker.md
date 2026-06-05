@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Hisaab build** (H01 scaffold complete — H02 currency picker next)
+**Hisaab build** (H02 currency picker complete — H03 chat tab next)
 
 ---
 
@@ -29,7 +29,7 @@
 | **Hisaab**                             |                                     |                |                   |
 | H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
 | H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | port 3002         |
-| H02 — Currency picker                  | feat/hisaab-currency-picker         | ⬜ Not started |                   |
+| H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    |                   |
 | H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                   |
 | H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                   |
 | H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                   |
@@ -188,6 +188,15 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `apps/hisaab/lib/types.ts`: `AIModel`, `Category`, `Currency`, `Expense` (with `model: AIModel`), `ParsedExpense`
 - `apps/hisaab/lib/categories.ts`: `CATEGORY_META` record (colour, Icon, chartColour hex), `ALL_CATEGORIES` array
 
+### Hisaab H02 — Currency picker (feat/hisaab-currency-picker)
+
+- `apps/hisaab/lib/currencies.ts`: `CURRENCIES` array (25 entries), `LOCALE_TO_CURRENCY` map, `detectCurrency()` reads `navigator.language` and maps region subtag to currency code, falls back to USD
+- `apps/hisaab/hooks/useCurrency.ts`: `useEffect`-based initialisation (instead of lazy `useState`) to avoid SSR hydration mismatch on return visits; `useCallback` on all returned functions
+- `apps/hisaab/components/CurrencyPickerModal.tsx`: bottom sheet on mobile / centred card on sm+; search input filters by name or code; radio-style list with detected currency pre-selected and scrolled into view; `isDismissible` prop gates X button, backdrop click, and Escape key; confirm button calls `onSelect`; `role="dialog"`, `aria-modal`, `aria-labelledby`, `role="radiogroup"` on list
+- `apps/hisaab/app/page.tsx`: passes `isDismissible={currency !== null}` to modal
+
+**Deviation from spec:** `useCurrency` uses `useEffect` for localStorage reads instead of the spec's lazy `useState` initializer — required to prevent React hydration mismatch on return visits (proven in H01).
+
 ---
 
 ## Open Questions
@@ -216,8 +225,8 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Hisaab H02 — Currency picker (`feat/hisaab-currency-picker`)
-2. Follow H03–H05 in order per `context/feature-specs/apps/hisaab/`
+1. Implement Hisaab H03 — Chat tab (`feat/hisaab-chat-tab`)
+2. Follow H04–H05 in order per `context/feature-specs/apps/hisaab/`
 3. Deploy Hisaab to Vercel after H05
 
 ---
