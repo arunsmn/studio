@@ -25,7 +25,7 @@
 | 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    |                   |
 | 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    |                   |
 | 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    |                   |
-| 10b — Image upload                     | feat/palette-ai-image-upload        | ⬜ Not started |                   |
+| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -144,6 +144,20 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
   - Share button (Share2 icon + "Share" label) added to AppShell `actions` slot alongside existing history button
 - `encodeState` / `decodeState` from `@studio/utils` — no new utility code needed
 - Build: `pnpm build --filter=@studio/palette-ai` passes with zero TypeScript errors
+
+---
+
+### Section 10b — Image upload (feat/palette-ai-image-upload)
+
+- `packages/ai-core/src/types.ts`: added `ImageMimeType` and `VisionProviderFn` types alongside existing `ProviderFn`
+- `packages/ai-core/src/claudeVisionProvider.ts`: vision provider using Anthropic SDK `messages.create` with image content block
+- `packages/ai-core/src/geminiVisionProvider.ts`: vision provider using Google GenAI `generateContent` with `inlineData` block
+- `packages/ai-core/src/index.ts`: exports both vision providers and new types
+- `apps/palette-ai/app/api/generate-from-image/route.ts`: POST route — rate limit → validate (type, size, count, model) → Strategy-routes to vision provider → `parseColours` with one retry on `PARSE_FAILED`; 15s AbortController timeout
+- `apps/palette-ai/hooks/usePalette.ts`: added `generateFromImage(file, count, model)` alongside existing `generate`; reads file as base64, posts to `/api/generate-from-image`, saves palette with `mood: "from image"`
+- `apps/palette-ai/components/MoodInput.tsx`: "Use image" button (ImageIcon) triggers hidden `<input type="file">`; thumbnail with spinner overlay shows while `isLoading`; disappears on completion; `onGenerateFromImage` callback passes model as third arg
+- File guards: JPEG/PNG/WEBP only, max 5 MB — validated in component and in the API route
+- Count selector and ModelToggle both apply to image-derived palettes; history badge reflects correct provider
 
 ---
 
