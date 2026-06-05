@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Hisaab build** (specs complete — Section H01 scaffold next)
+**Hisaab build** (H01 scaffold complete — H02 currency picker next)
 
 ---
 
@@ -28,7 +28,7 @@
 | 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop |
 | **Hisaab**                             |                                     |                |                   |
 | H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
-| H01 — Scaffold                         | feat/hisaab-scaffold                | ⬜ Not started | port 3002         |
+| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | port 3002         |
 | H02 — Currency picker                  | feat/hisaab-currency-picker         | ⬜ Not started |                   |
 | H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                   |
 | H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                   |
@@ -169,6 +169,27 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Hisaab H01 — Scaffold (feat/hisaab-scaffold)
+
+- `apps/hisaab/package.json`: `@studio/hisaab`, port 3002, idb ^8, recharts ^2.12, `@studio/ai-core` workspace dep for API routes
+- `apps/hisaab/next.config.ts`: transpilePackages for all four `@studio/*` packages
+- `apps/hisaab/tailwind.config.ts`: extends base config, content globs cover app/components/hooks/lib + shared UI package
+- `apps/hisaab/tsconfig.json`: extends `tsconfig.base.json`, `@/*` path alias
+- `apps/hisaab/postcss.config.mjs`: tailwindcss + autoprefixer
+- `apps/hisaab/vercel.json`: monorepo build pattern, `--filter=@studio/hisaab`
+- `apps/hisaab/app/globals.css`: Tailwind directives
+- `apps/hisaab/app/layout.tsx`: Inter font, `className="dark"` on `<html>`, metadata
+- `apps/hisaab/app/page.tsx`: client component — `h-dvh` flex layout, fixed top header (app name + currency chip), three tab panels (all mounted, inactive `hidden`), fixed bottom tab bar with ARIA roles
+- `apps/hisaab/components/ChatTab.tsx`: stub — "coming in Section 03"
+- `apps/hisaab/components/SummaryTab.tsx`: stub — "coming in Section 04"
+- `apps/hisaab/components/HistoryTab.tsx`: stub — "coming in Section 05"
+- `apps/hisaab/components/CurrencyPickerModal.tsx`: stub — defaults to INR, will be replaced in H02
+- `apps/hisaab/hooks/useCurrency.ts`: lazy `useState` reads `studio:budget-currency`; `isPickerOpen` true on first visit; exposes `openPicker`, `closePicker`, `saveCurrency`
+- `apps/hisaab/lib/types.ts`: `AIModel`, `Category`, `Currency`, `Expense` (with `model: AIModel`), `ParsedExpense`
+- `apps/hisaab/lib/categories.ts`: `CATEGORY_META` record (colour, Icon, chartColour hex), `ALL_CATEGORIES` array
+
+---
+
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
@@ -195,8 +216,8 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Hisaab H01 — App scaffold (`feat/hisaab-scaffold`)
-2. Follow H02–H05 in order per `context/feature-specs/apps/hisaab/`
+1. Implement Hisaab H02 — Currency picker (`feat/hisaab-currency-picker`)
+2. Follow H03–H05 in order per `context/feature-specs/apps/hisaab/`
 3. Deploy Hisaab to Vercel after H05
 
 ---
