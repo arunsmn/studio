@@ -9,6 +9,10 @@ A production-grade AI tool that generates design-ready colour palettes from natu
 
 ---
 
+![PaletteAI screenshot](./public/screenshot.png)
+
+---
+
 ## Features
 
 - **Text-to-palette** — describe a mood, tone, use case, audience, and theme; receive 3–8 named, hex-accurate colours with usage roles and rationale
@@ -141,6 +145,36 @@ Zero infrastructure, zero auth, fully stateless. A shared URL works immediately 
 
 **Why `<div role="button">` on SwatchCard?**
 `SwatchCard` contains a `CopyButton` (`<button>`). Nesting `<button>` inside `<button>` is invalid HTML — browsers silently remove the inner element, causing a React hydration mismatch on every render. Converting the outer element to a `<div role="button">` with keyboard handlers resolves the structural issue while keeping full accessibility.
+
+---
+
+## Roadmap
+
+### ✅ Phase 1 — Core (shipped)
+- Text-to-palette via Claude and Gemini
+- Tone, use case, audience, theme, and count selectors
+- Swatch display with WCAG contrast badges and HSL detail panel
+- Live preview across card / dashboard / landing layouts
+- CSS, Tailwind, and JSON export
+- Palette history in localStorage
+
+### ✅ Phase 2 — Sharing and vision (shipped)
+- Shareable URLs via base64-encoded URL hash
+- Image-to-palette via Claude and Gemini vision APIs
+- Share button with "Link copied!" toast
+- History palettes restore from URL with no API call
+
+### 🔜 Phase 3 — Refinement and comparison (planned)
+- **Refinement chips** — "make it darker", "increase contrast", "add warmth"; re-calls the API with the existing palette appended to the prompt
+- **Compare mode** — fire Claude and Gemini in parallel; display two SwatchGrids side by side; thumbs-up vote stored in Upstash KV with live aggregate scores
+- **Figma export** — copy palette as a Figma-ready JSON plugin payload
+- **Upstash Redis rate limiter** — replace in-memory Map so limits survive Vercel cold starts
+
+### 💡 Future ideas
+- Public palette gallery — opt-in sharing with a short slug URL
+- Colour lock — pin one colour and regenerate the rest around it
+- Accessibility report — full WCAG AA/AAA matrix across all colour pairs in the palette
+- Additional providers — OpenAI GPT-4o vision, Stability AI colour extraction
 
 ---
 
