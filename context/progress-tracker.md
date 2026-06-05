@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Phase 1 — PaletteAI build** (complete — Phase 2 features next)
+**Hisaab build** (in progress — Section 01 next)
 
 ---
 
@@ -21,11 +21,17 @@
 | 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop |
 | 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop |
 | 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop |
-| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    |                   |
-| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    |                   |
-| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    |                   |
-| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    |                   |
+| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    | Merged to develop |
+| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    | Merged to develop |
+| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    | Merged to develop |
+| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    | Merged to develop |
 | 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop |
+| Hisaab 01 — App scaffold               | feat/hisaab-scaffold                | ⬜ Not started | port 3002         |
+| Hisaab 02 — Currency picker            | feat/hisaab-currency-picker         | ⬜ Not started |                   |
+| Hisaab 03 — Chat tab                   | feat/hisaab-chat-tab                | ⬜ Not started |                   |
+| Hisaab 04 — Summary tab                | feat/hisaab-summary-tab             | ⬜ Not started |                   |
+| Hisaab 05 — History tab                | feat/hisaab-history-tab             | ⬜ Not started |                   |
+| Hisaab 06 — Vercel deployment          | —                                   | ⬜ Not started |                   |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -108,18 +114,6 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
-### Section 09 — Vercel deployment (feat/vercel-deployment)
-
-- `apps/root/vercel.json`: framework `nextjs`, buildCommand `cd ../.. && pnpm build --filter=@studio/root`, installCommand `cd ../.. && pnpm install --frozen-lockfile`, outputDirectory `.next`
-- `apps/palette-ai/vercel.json`: same pattern with `--filter=@studio/palette-ai`
-- Both files version-control the monorepo build overrides; Vercel dashboard Root Directory must be set to the respective `apps/<name>` folder per project
-- `packages/ai-core/src/rateLimiter.ts` corrected to in-memory Map (removed `@vercel/kv` — Phase 2 decision per architecture-context.md)
-- `@vercel/kv` removed from `packages/ai-core/package.json` and `apps/palette-ai/package.json`
-- Env vars for `apps/palette-ai`: `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`
-- Env vars for `apps/root`: none
-
----
-
 ### Section 08 — Tests + polish (feat/palette-ai-tests-polish)
 
 - `vitest.config.ts`: updated with `resolve.alias` for `@studio/ui`, `@studio/utils`, `@studio/ai-core`; added `jsdom` to devDependencies
@@ -131,6 +125,18 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `hooks/useHistory.ts`: replaced `useEffect` + `setHistory` with lazy `useState` initializer per code-standards pattern; removes the post-mount history flash in the count badge
 - `components/MoodInput.tsx`: replaced `useEffect` localStorage read + `setModel` with lazy `useState` initializer; removed `useEffect` import
 - Total: **69 tests, 5 files, all passing**
+
+---
+
+### Section 09 — Vercel deployment (feat/vercel-deployment)
+
+- `apps/root/vercel.json`: framework `nextjs`, buildCommand `cd ../.. && pnpm build --filter=@studio/root`, installCommand `cd ../.. && pnpm install --frozen-lockfile`, outputDirectory `.next`
+- `apps/palette-ai/vercel.json`: same pattern with `--filter=@studio/palette-ai`
+- Both files version-control the monorepo build overrides; Vercel dashboard Root Directory must be set to the respective `apps/<name>` folder per project
+- `packages/ai-core/src/rateLimiter.ts` corrected to in-memory Map (removed `@vercel/kv` — Phase 2 decision per architecture-context.md)
+- `@vercel/kv` removed from `packages/ai-core/package.json` and `apps/palette-ai/package.json`
+- Env vars for `apps/palette-ai`: `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`
+- Env vars for `apps/root`: none
 
 ---
 
@@ -185,7 +191,9 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Section 10b — Image upload (`feat/palette-ai-image-upload`)
+1. Build Hisaab — Section 01 scaffold (feat/hisaab-scaffold)
+2. Follow sections 02–05 in order per context/feature-specs/apps/hisaab/
+3. Deploy Hisaab to Vercel after Section 05
 
 ---
 
