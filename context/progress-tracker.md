@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Hisaab build** (in progress — Section 01 next)
+**Hisaab build** (specs complete — Section H01 scaffold next)
 
 ---
 
@@ -26,12 +26,14 @@
 | 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    | Merged to develop |
 | 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    | Merged to develop |
 | 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop |
-| Hisaab 01 — App scaffold               | feat/hisaab-scaffold                | ⬜ Not started | port 3002         |
-| Hisaab 02 — Currency picker            | feat/hisaab-currency-picker         | ⬜ Not started |                   |
-| Hisaab 03 — Chat tab                   | feat/hisaab-chat-tab                | ⬜ Not started |                   |
-| Hisaab 04 — Summary tab                | feat/hisaab-summary-tab             | ⬜ Not started |                   |
-| Hisaab 05 — History tab                | feat/hisaab-history-tab             | ⬜ Not started |                   |
-| Hisaab 06 — Vercel deployment          | —                                   | ⬜ Not started |                   |
+| **Hisaab**                             |                                     |                |                   |
+| H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
+| H01 — Scaffold                         | feat/hisaab-scaffold                | ⬜ Not started | port 3002         |
+| H02 — Currency picker                  | feat/hisaab-currency-picker         | ⬜ Not started |                   |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                   |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                   |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                   |
+| H06 — Vercel deployment                | —                                   | ⬜ Not started |                   |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -171,6 +173,8 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 - [ ] Confirm final domain name for yourdomain.dev
 - [ ] Decide: deploy root and palette-ai to same Vercel team or separate?
+- [ ] Hisaab: confirm Vercel project setup (separate project, port 3002 local only)
+- [ ] Hisaab: confirm `@studio/ai-core` rate limiter reuse vs separate limits per app
 
 ---
 
@@ -191,9 +195,9 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Build Hisaab — Section 01 scaffold (feat/hisaab-scaffold)
-2. Follow sections 02–05 in order per context/feature-specs/apps/hisaab/
-3. Deploy Hisaab to Vercel after Section 05
+1. Implement Hisaab H01 — App scaffold (`feat/hisaab-scaffold`)
+2. Follow H02–H05 in order per `context/feature-specs/apps/hisaab/`
+3. Deploy Hisaab to Vercel after H05
 
 ---
 
