@@ -166,7 +166,6 @@ Zero infrastructure, zero auth, fully stateless. A shared URL works immediately 
 
 ### 🔜 Phase 3 — Refinement and comparison (planned)
 - **Refinement chips** — "make it darker", "increase contrast", "add warmth"; re-calls the API with the existing palette appended to the prompt
-- **Compare mode** — fire Claude and Gemini in parallel; display two SwatchGrids side by side; thumbs-up vote stored in Upstash KV with live aggregate scores
 - **Figma export** — copy palette as a Figma-ready JSON plugin payload
 - **Upstash Redis rate limiter** — replace in-memory Map so limits survive Vercel cold starts
 
