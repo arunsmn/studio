@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Phase 1 — PaletteAI build** (complete — Phase 2 features next)
+**Phase 2 — Hisaab build** (specs complete — scaffold next)
 
 ---
 
@@ -26,6 +26,13 @@
 | 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    |                   |
 | 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    |                   |
 | 10b — Image upload                     | feat/palette-ai-image-upload        | ⬜ Not started |                   |
+| **Hisaab**                             |                                     |                |                   |
+| H00 — Specs                            | feat/hisaab-scaffold                | ✅ Complete    | All 6 specs written |
+| H01 — Scaffold                         | feat/hisaab-scaffold                | ⬜ Not started |                   |
+| H02 — Currency picker                  | feat/hisaab-currency-picker         | ⬜ Not started |                   |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                   |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                   |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                   |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -151,6 +158,8 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 - [ ] Confirm final domain name for yourdomain.dev
 - [ ] Decide: deploy root and palette-ai to same Vercel team or separate?
+- [ ] Hisaab: confirm Vercel project setup (separate project, port 3002 local only)
+- [ ] Hisaab: confirm `@studio/ai-core` rate limiter reuse vs separate limits per app
 
 ---
 
@@ -171,7 +180,10 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Section 10b — Image upload (`feat/palette-ai-image-upload`)
+1. Implement Hisaab Section H01 — App scaffold (`feat/hisaab-scaffold`)
+   - Start from `develop`: `git checkout develop && git pull origin develop`
+   - Create branch: `git checkout -b feat/hisaab-scaffold`
+2. Implement Section 10b — PaletteAI Image upload (`feat/palette-ai-image-upload`)
 
 ---
 
