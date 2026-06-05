@@ -33,6 +33,48 @@ Read `node_modules/next/dist/docs/` if in doubt. Heed deprecation notices.
 - The shared packages are `@studio/ui`, `@studio/ai-core`, `@studio/utils`,
   `@studio/tailwind-config`. Import from these — never duplicate logic.
 
+---
+
+## Git Workflow Rules — Critical
+
+These rules are non-negotiable for every session:
+
+- **Never run git commands.** Always instruct the user to run them.
+- **Never assume a command has been run.** Wait for the user to confirm
+  before continuing.
+- **All work goes to develop first.** Never instruct pushing directly
+  to main. Main is only updated by merging develop.
+- **One feature branch per section.** Branch off develop, never off main.
+
+When providing git commands:
+
+1. Show the exact command
+2. Add a one-line comment explaining what it does
+3. Show them in the exact order to run
+4. Wait for the user to confirm before proceeding
+
+Example format:
+
+```bash
+# Switch to develop and get latest changes
+git checkout develop
+git pull origin develop
+
+# Create a new branch for this section
+git checkout -b feat/hisaab-scaffold
+
+# Stage all new files
+git add .
+
+# Commit with a descriptive message
+git commit -m "feat: hisaab app scaffold — Next.js, tabs, layout"
+
+# Push the branch to GitHub
+git push origin feat/hisaab-scaffold
+```
+
+---
+
 ## After Every Section — Non-Negotiable
 
 When a section is fully implemented and the checkpoint passes,
@@ -45,18 +87,56 @@ you MUST do the following before ending your response:
    - Update Next Steps
    - Update Current Phase if needed
 
-2. Show the git commands to commit and push:
+2. Show the git commands with explanations (user runs these):
 
 ```bash
-   git add .
-   git commit -m "feat: [section name]"
-   git push origin [branch-name]
+# Stage all changes
+git add .
+
+# Commit — message describes what was built
+git commit -m "feat: [section name] — [brief detail]"
+
+# Push the feature branch
+git push origin feat/[branch-name]
 ```
 
-3. Show the PR command:
+3. Show the PR details — user creates this on GitHub:
+
+**PR Title:**
+
+```
+feat: [section name] — [what it delivers]
+```
+
+**PR Description:**
+
+```
+## What this PR does
+[2-3 sentences describing what was built]
+
+## Files created
+- `path/to/file.tsx` — what it does
+- `path/to/file.ts` — what it does
+
+## Files modified
+- `path/to/file.tsx` — what changed and why
+
+## Checkpoint passed
+- [ ] [specific thing that was verified]
+- [ ] [specific thing that was verified]
+
+## Notes
+[Any decisions made, trade-offs, or things to be aware of]
+```
+
+4. Remind the user to merge the PR on GitHub then run:
 
 ```bash
-   gh pr create --base develop --title "feat: [section name]" --body "Completes Section X"
+# Switch back to develop after PR is merged
+git checkout develop
+
+# Pull the merged changes locally
+git pull origin develop
 ```
 
 Do not wait to be asked. Do not skip this. It is part of completing a section.

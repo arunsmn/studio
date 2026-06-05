@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm --filter=@studio/palette-ai test)",
+      "Bash(npx vitest *)"
+    ]
+  }
+}
