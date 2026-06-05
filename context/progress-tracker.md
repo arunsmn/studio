@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Phase 1 — PaletteAI build** (complete — Phase 2 features next)
+**Hisaab build** (H01 scaffold complete — H02 currency picker next)
 
 ---
 
@@ -21,11 +21,19 @@
 | 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop |
 | 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop |
 | 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop |
-| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    |                   |
-| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    |                   |
-| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    |                   |
-| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    |                   |
-| 10b — Image upload                     | feat/palette-ai-image-upload        | ⬜ Not started |                   |
+| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    | Merged to develop |
+| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    | Merged to develop |
+| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    | Merged to develop |
+| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    | Merged to develop |
+| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop |
+| **Hisaab**                             |                                     |                |                   |
+| H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
+| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | port 3002         |
+| H02 — Currency picker                  | feat/hisaab-currency-picker         | ⬜ Not started |                   |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                   |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                   |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                   |
+| H06 — Vercel deployment                | —                                   | ⬜ Not started |                   |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -108,18 +116,6 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
-### Section 09 — Vercel deployment (feat/vercel-deployment)
-
-- `apps/root/vercel.json`: framework `nextjs`, buildCommand `cd ../.. && pnpm build --filter=@studio/root`, installCommand `cd ../.. && pnpm install --frozen-lockfile`, outputDirectory `.next`
-- `apps/palette-ai/vercel.json`: same pattern with `--filter=@studio/palette-ai`
-- Both files version-control the monorepo build overrides; Vercel dashboard Root Directory must be set to the respective `apps/<name>` folder per project
-- `packages/ai-core/src/rateLimiter.ts` corrected to in-memory Map (removed `@vercel/kv` — Phase 2 decision per architecture-context.md)
-- `@vercel/kv` removed from `packages/ai-core/package.json` and `apps/palette-ai/package.json`
-- Env vars for `apps/palette-ai`: `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`
-- Env vars for `apps/root`: none
-
----
-
 ### Section 08 — Tests + polish (feat/palette-ai-tests-polish)
 
 - `vitest.config.ts`: updated with `resolve.alias` for `@studio/ui`, `@studio/utils`, `@studio/ai-core`; added `jsdom` to devDependencies
@@ -131,6 +127,18 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `hooks/useHistory.ts`: replaced `useEffect` + `setHistory` with lazy `useState` initializer per code-standards pattern; removes the post-mount history flash in the count badge
 - `components/MoodInput.tsx`: replaced `useEffect` localStorage read + `setModel` with lazy `useState` initializer; removed `useEffect` import
 - Total: **69 tests, 5 files, all passing**
+
+---
+
+### Section 09 — Vercel deployment (feat/vercel-deployment)
+
+- `apps/root/vercel.json`: framework `nextjs`, buildCommand `cd ../.. && pnpm build --filter=@studio/root`, installCommand `cd ../.. && pnpm install --frozen-lockfile`, outputDirectory `.next`
+- `apps/palette-ai/vercel.json`: same pattern with `--filter=@studio/palette-ai`
+- Both files version-control the monorepo build overrides; Vercel dashboard Root Directory must be set to the respective `apps/<name>` folder per project
+- `packages/ai-core/src/rateLimiter.ts` corrected to in-memory Map (removed `@vercel/kv` — Phase 2 decision per architecture-context.md)
+- `@vercel/kv` removed from `packages/ai-core/package.json` and `apps/palette-ai/package.json`
+- Env vars for `apps/palette-ai`: `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`
+- Env vars for `apps/root`: none
 
 ---
 
@@ -147,10 +155,47 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Section 10b — Image upload (feat/palette-ai-image-upload)
+
+- `packages/ai-core/src/types.ts`: added `ImageMimeType` and `VisionProviderFn` types alongside existing `ProviderFn`
+- `packages/ai-core/src/claudeVisionProvider.ts`: vision provider using Anthropic SDK `messages.create` with image content block
+- `packages/ai-core/src/geminiVisionProvider.ts`: vision provider using Google GenAI `generateContent` with `inlineData` block
+- `packages/ai-core/src/index.ts`: exports both vision providers and new types
+- `apps/palette-ai/app/api/generate-from-image/route.ts`: POST route — rate limit → validate (type, size, count, model) → Strategy-routes to vision provider → `parseColours` with one retry on `PARSE_FAILED`; 15s AbortController timeout
+- `apps/palette-ai/hooks/usePalette.ts`: added `generateFromImage(file, count, model)` alongside existing `generate`; reads file as base64, posts to `/api/generate-from-image`, saves palette with `mood: "from image"`
+- `apps/palette-ai/components/MoodInput.tsx`: "Use image" button (ImageIcon) triggers hidden `<input type="file">`; thumbnail with spinner overlay shows while `isLoading`; disappears on completion; `onGenerateFromImage` callback passes model as third arg
+- File guards: JPEG/PNG/WEBP only, max 5 MB — validated in component and in the API route
+- Count selector and ModelToggle both apply to image-derived palettes; history badge reflects correct provider
+
+---
+
+### Hisaab H01 — Scaffold (feat/hisaab-scaffold)
+
+- `apps/hisaab/package.json`: `@studio/hisaab`, port 3002, idb ^8, recharts ^2.12, `@studio/ai-core` workspace dep for API routes
+- `apps/hisaab/next.config.ts`: transpilePackages for all four `@studio/*` packages
+- `apps/hisaab/tailwind.config.ts`: extends base config, content globs cover app/components/hooks/lib + shared UI package
+- `apps/hisaab/tsconfig.json`: extends `tsconfig.base.json`, `@/*` path alias
+- `apps/hisaab/postcss.config.mjs`: tailwindcss + autoprefixer
+- `apps/hisaab/vercel.json`: monorepo build pattern, `--filter=@studio/hisaab`
+- `apps/hisaab/app/globals.css`: Tailwind directives
+- `apps/hisaab/app/layout.tsx`: Inter font, `className="dark"` on `<html>`, metadata
+- `apps/hisaab/app/page.tsx`: client component — `h-dvh` flex layout, fixed top header (app name + currency chip), three tab panels (all mounted, inactive `hidden`), fixed bottom tab bar with ARIA roles
+- `apps/hisaab/components/ChatTab.tsx`: stub — "coming in Section 03"
+- `apps/hisaab/components/SummaryTab.tsx`: stub — "coming in Section 04"
+- `apps/hisaab/components/HistoryTab.tsx`: stub — "coming in Section 05"
+- `apps/hisaab/components/CurrencyPickerModal.tsx`: stub — defaults to INR, will be replaced in H02
+- `apps/hisaab/hooks/useCurrency.ts`: lazy `useState` reads `studio:budget-currency`; `isPickerOpen` true on first visit; exposes `openPicker`, `closePicker`, `saveCurrency`
+- `apps/hisaab/lib/types.ts`: `AIModel`, `Category`, `Currency`, `Expense` (with `model: AIModel`), `ParsedExpense`
+- `apps/hisaab/lib/categories.ts`: `CATEGORY_META` record (colour, Icon, chartColour hex), `ALL_CATEGORIES` array
+
+---
+
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
 - [ ] Decide: deploy root and palette-ai to same Vercel team or separate?
+- [ ] Hisaab: confirm Vercel project setup (separate project, port 3002 local only)
+- [ ] Hisaab: confirm `@studio/ai-core` rate limiter reuse vs separate limits per app
 
 ---
 
@@ -171,7 +216,9 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Section 10b — Image upload (`feat/palette-ai-image-upload`)
+1. Implement Hisaab H02 — Currency picker (`feat/hisaab-currency-picker`)
+2. Follow H03–H05 in order per `context/feature-specs/apps/hisaab/`
+3. Deploy Hisaab to Vercel after H05
 
 ---
 
