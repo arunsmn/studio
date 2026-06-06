@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Hisaab build** (H02 currency picker complete — H03 chat tab next)
+**Hisaab build** (H03 chat tab complete — H04 summary tab next)
 
 ---
 
@@ -30,7 +30,7 @@
 | H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
 | H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | Merged to develop   |
 | H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop   |
-| H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                     |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    |                     |
 | H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                     |
 | H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                     |
 | H06 — Vercel deployment                | —                                   | ⬜ Not started |                     |
@@ -199,6 +199,27 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Hisaab H03 — Chat tab (feat/hisaab-chat-tab)
+
+- `apps/hisaab/lib/db.ts`: `openDB` wrapper — `getDB()` singleton, `addExpense` (put), `deleteExpense`, `getAllExpenses` (sorted by `createdAt` desc)
+- `apps/hisaab/lib/buildExpensePrompt.ts`: injects today's date + currency code + category list; date inference rules for "yesterday" and day names
+- `apps/hisaab/lib/parseExpense.ts`: strips markdown fences, JSON.parse, validates shape, normalises invalid category to "Others", validates date format
+- `apps/hisaab/lib/providers/index.ts`: `generateParsedExpense()` strategy router; routes to `claudeProvider` or `geminiProvider`; one retry with stricter prompt suffix on `PARSE_FAILED`
+- `apps/hisaab/app/api/parse-expense/route.ts`: rate limit → validate body → `generateParsedExpense` → reject amount ≤ 0 → return `ParsedExpense`; 15s AbortController timeout
+- `apps/hisaab/hooks/useExpenses.ts`: loads all expenses from IndexedDB on mount; `add` and `remove` update IndexedDB + React state atomically
+- `apps/hisaab/hooks/useChatModel.ts`: `useEffect`-based localStorage read for hydration safety; `setModel` writes to `studio:preferred-model`
+- `apps/hisaab/components/UserMessageBubble.tsx`: right-aligned violet bubble, `rounded-tr-sm`, max-w-75%
+- `apps/hisaab/components/ExpenseBubble.tsx`: left-aligned white/dark bubble with category icon + colour; inline delete confirmation (no modal); fade+scale animation on delete; date formatted as Today / Yesterday / DD MMM
+- `apps/hisaab/components/ChatTab.tsx`: ModelToggle sub-header; scrollable bubble area; empty state with example hints; loading dots bubble; sticky input bar (Enter to send, Shift+Enter for newline); error shown above input, clears on next keystroke; `useEffect` restores expenses from IndexedDB into messages on mount; `model` included on `Expense` object
+
+**User-specified completions applied:**
+- `useEffect` that initialises messages from persisted expenses
+- `model` field on `Expense` object in `handleSend`
+
+**Deviation from spec:** `useChatModel` uses `useEffect` instead of lazy `useState` initializer — consistent with H01/H02 hydration fix pattern.
+
+---
+
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
@@ -225,8 +246,8 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Hisaab H03 — Chat tab (`feat/hisaab-chat-tab`)
-2. Follow H04–H05 in order per `context/feature-specs/apps/hisaab/`
+1. Implement Hisaab H04 — Summary tab (`feat/hisaab-summary-tab`)
+2. Implement Hisaab H05 — History tab + CSV export (`feat/hisaab-history-tab`)
 3. Deploy Hisaab to Vercel after H05
 
 ---
