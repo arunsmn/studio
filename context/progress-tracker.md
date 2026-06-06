@@ -13,27 +13,27 @@
 
 ## Status by Section
 
-| Section                                | Branch                              | Status         | Notes             |
-| -------------------------------------- | ----------------------------------- | -------------- | ----------------- |
-| 01 — Monorepo scaffold                 | feat/monorepo-scaffold              | ✅ Complete    | Merged to develop |
-| 02 — Shared packages                   | feat/shared-packages                | ✅ Complete    | Merged to develop |
-| 03 — Root site                         | feat/root-site                      | ✅ Complete    | Merged to develop |
-| 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop |
-| 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop |
-| 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop |
-| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    | Merged to develop |
-| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    | Merged to develop |
-| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    | Merged to develop |
-| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    | Merged to develop |
-| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop |
-| **Hisaab**                             |                                     |                |                   |
+| Section                                | Branch                              | Status         | Notes               |
+| -------------------------------------- | ----------------------------------- | -------------- | ------------------- |
+| 01 — Monorepo scaffold                 | feat/monorepo-scaffold              | ✅ Complete    | Merged to develop   |
+| 02 — Shared packages                   | feat/shared-packages                | ✅ Complete    | Merged to develop   |
+| 03 — Root site                         | feat/root-site                      | ✅ Complete    | Merged to develop   |
+| 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop   |
+| 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop   |
+| 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop   |
+| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    | Merged to develop   |
+| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    | Merged to develop   |
+| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    | Merged to develop   |
+| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    | Merged to develop   |
+| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop   |
+| **Hisaab**                             |                                     |                |                     |
 | H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
-| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | port 3002         |
-| H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    |                   |
-| H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                   |
-| H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                   |
-| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                   |
-| H06 — Vercel deployment                | —                                   | ⬜ Not started |                   |
+| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | Merged to develop   |
+| H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop   |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ⬜ Not started |                     |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                     |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                     |
+| H06 — Vercel deployment                | —                                   | ⬜ Not started |                     |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -204,7 +204,6 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - [ ] Confirm final domain name for yourdomain.dev
 - [ ] Decide: deploy root and palette-ai to same Vercel team or separate?
 - [ ] Hisaab: confirm Vercel project setup (separate project, port 3002 local only)
-- [ ] Hisaab: confirm `@studio/ai-core` rate limiter reuse vs separate limits per app
 
 ---
 
@@ -220,6 +219,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 | Mobile 8 colours: banner + scroll            | Discussed and confirmed by user                                               | Planning |
 | Strategy pattern for AI providers            | Extensible — adding OpenAI = 1 file + 1 line                                  | Planning |
 | No auth/DB in Phase 1 and 2                  | Portfolio tool, localStorage sufficient                                       | Planning |
+| Hisaab rate limiter                          | Reuse `@studio/ai-core` `checkRateLimit` — apps are separate Vercel deployments, already isolated | Hisaab build |
 
 ---
 
