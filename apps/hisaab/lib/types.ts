@@ -33,3 +33,8 @@ export interface ParsedExpense {
   description: string;
   date: string;
 }
+
+export interface ChartEntry {
+  name: Category;
+  value: number;
+}

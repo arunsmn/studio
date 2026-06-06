@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, MessageCircle } from "lucide-react";
 import { Button, ModelToggle } from "@studio/ui";
-import { useExpenses } from "@/hooks/useExpenses";
 import { useChatModel } from "@/hooks/useChatModel";
 import ExpenseBubble from "./ExpenseBubble";
 import UserMessageBubble from "./UserMessageBubble";
@@ -18,10 +17,19 @@ interface ChatMessage {
 
 interface ChatTabProps {
   currency: Currency | null;
+  expenses: Expense[];
+  expensesLoading: boolean;
+  onAdd: (expense: Expense) => Promise<void>;
+  onRemove: (id: string) => Promise<void>;
 }
 
-export default function ChatTab({ currency }: ChatTabProps) {
-  const { expenses, isLoading: expensesLoading, add, remove } = useExpenses();
+export default function ChatTab({
+  currency,
+  expenses,
+  expensesLoading,
+  onAdd,
+  onRemove,
+}: ChatTabProps) {
   const { model, setModel } = useChatModel();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -32,7 +40,7 @@ export default function ChatTab({ currency }: ChatTabProps) {
   useEffect(() => {
     if (!expensesLoading && expenses.length > 0 && messages.length === 0) {
       setMessages(
-        expenses.map((e) => ({
+        [...expenses].reverse().map((e) => ({
           id: e.id,
           type: "expense" as const,
           expense: e,
@@ -83,7 +91,7 @@ export default function ChatTab({ currency }: ChatTabProps) {
         model,
       };
 
-      await add(expense);
+      await onAdd(expense);
       setMessages((prev) => [
         ...prev,
         { id: expense.id, type: "expense", expense },
@@ -96,7 +104,7 @@ export default function ChatTab({ currency }: ChatTabProps) {
   }
 
   async function handleDelete(id: string) {
-    await remove(id);
+    await onRemove(id);
     setMessages((prev) => prev.filter((m) => m.id !== id));
   }
 
@@ -169,9 +177,7 @@ export default function ChatTab({ currency }: ChatTabProps) {
 
       {/* Input bar */}
       <div className="flex-none px-4 py-3 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-        {error && (
-          <p className="text-xs text-red-500 mb-2">{error}</p>
-        )}
+        {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
         <div className="flex gap-2 items-end">
           <textarea
             value={input}

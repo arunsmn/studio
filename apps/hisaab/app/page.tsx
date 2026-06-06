@@ -7,6 +7,7 @@ import SummaryTab from "@/components/SummaryTab";
 import HistoryTab from "@/components/HistoryTab";
 import CurrencyPickerModal from "@/components/CurrencyPickerModal";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useExpenses } from "@/hooks/useExpenses";
 
 type Tab = "chat" | "summary" | "history";
 
@@ -19,6 +20,7 @@ const TABS: Array<{ id: Tab; label: string; Icon: React.ElementType }> = [
 export default function HisaabPage() {
   const [activeTab, setActiveTab] = useState<Tab>("chat");
   const { currency, isPickerOpen, openPicker, closePicker, saveCurrency } = useCurrency();
+  const { expenses, isLoading: expensesLoading, add, remove } = useExpenses();
 
   return (
     <div className="flex flex-col h-dvh bg-gray-50 dark:bg-gray-950">
@@ -39,13 +41,23 @@ export default function HisaabPage() {
 
       <main className="flex-1 min-h-0">
         <div className={activeTab === "chat" ? "h-full" : "hidden"}>
-          <ChatTab currency={currency} />
+          <ChatTab
+            currency={currency}
+            expenses={expenses}
+            expensesLoading={expensesLoading}
+            onAdd={add}
+            onRemove={remove}
+          />
         </div>
         <div className={activeTab === "summary" ? "h-full" : "hidden"}>
-          <SummaryTab currency={currency} />
+          <SummaryTab currency={currency} expenses={expenses} />
         </div>
         <div className={activeTab === "history" ? "h-full" : "hidden"}>
-          <HistoryTab currency={currency} />
+          <HistoryTab
+            currency={currency}
+            expenses={expenses}
+            onRemove={remove}
+          />
         </div>
       </main>
 
