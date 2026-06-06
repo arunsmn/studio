@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Hisaab build** (H03 chat tab complete — H04 summary tab next)
+**Hisaab build** (H04 summary tab complete — H05 history tab next)
 
 ---
 
@@ -30,8 +30,8 @@
 | H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
 | H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | Merged to develop   |
 | H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop   |
-| H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    |                     |
-| H04 — Summary tab                      | feat/hisaab-summary-tab             | ⬜ Not started |                     |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    | Merged to develop   |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    |                     |
 | H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                     |
 | H06 — Vercel deployment                | —                                   | ⬜ Not started |                     |
 
@@ -220,6 +220,24 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Hisaab H04 — Summary tab (feat/hisaab-summary-tab)
+
+- `apps/hisaab/lib/types.ts`: added `ChartEntry` interface (`{ name: Category; value: number }`)
+- `apps/hisaab/lib/buildInsightPrompt.ts`: builds prompt with period label, total, category breakdown sorted by amount, transaction count; one-sentence 20-word max instruction
+- `apps/hisaab/lib/parseInsight.ts`: strips markdown chars, trims raw AI response
+- `apps/hisaab/app/api/summary-insight/route.ts`: POST — rate limit → validate (expenses array, period, currency) → Gemini only → `buildInsightPrompt` → `parseInsight` → `{ insight }`; max 200 expenses server-side
+- `apps/hisaab/components/DonutChart.tsx`: Recharts `PieChart + Pie + Cell`; absolute-positioned centre label with total + "total"; empty state renders CSS ring div (no PieChart with empty data); `role="img"` with descriptive `aria-label`
+- `apps/hisaab/components/CategoryBreakdown.tsx`: sorted by amount desc; icon + name + amount + percentage per row; progress bar via inline `style={{ width, background }}` using `chartColour` from `CATEGORY_META`; `role="list/listitem/progressbar"` with ARIA attrs
+- `apps/hisaab/components/InsightCard.tsx`: `aria-live="polite"`; Skeleton while loading; static prompt when no expenses; insight text or fallback
+- `apps/hisaab/components/SummaryTab.tsx`: period toggle (Weekly/Monthly, `role="radiogroup"`); `useMemo` for `filteredExpenses` and `chartData/total`; insight `useEffect` with 500ms debounce via `useRef`; passes `expenses` + `currency` to child components
+- `apps/hisaab/app/page.tsx`: lifted `useExpenses` from `ChatTab` to page level; passes `expenses`, `expensesLoading`, `onAdd`, `onRemove` to `ChatTab`; passes `expenses` to `SummaryTab`; passes `expenses`, `onRemove` to `HistoryTab`
+- `apps/hisaab/components/ChatTab.tsx`: removed internal `useExpenses()` call; accepts `expenses`, `expensesLoading`, `onAdd`, `onRemove` as props
+- `apps/hisaab/components/HistoryTab.tsx`: stub updated with correct props for H05 (`currency`, `expenses`, `onRemove`)
+
+**Architecture note:** `useExpenses` lifted to `page.tsx` (not in spec) to enable cross-tab reactivity — when ChatTab adds an expense, SummaryTab updates immediately without re-reading IndexedDB.
+
+---
+
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
@@ -246,9 +264,8 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Hisaab H04 — Summary tab (`feat/hisaab-summary-tab`)
-2. Implement Hisaab H05 — History tab + CSV export (`feat/hisaab-history-tab`)
-3. Deploy Hisaab to Vercel after H05
+1. Implement Hisaab H05 — History tab + CSV export (`feat/hisaab-history-tab`)
+2. Deploy Hisaab to Vercel (H06)
 
 ---
 
