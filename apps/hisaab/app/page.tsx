@@ -20,7 +20,7 @@ const TABS: Array<{ id: Tab; label: string; Icon: React.ElementType }> = [
 export default function HisaabPage() {
   const [activeTab, setActiveTab] = useState<Tab>("chat");
   const { currency, isPickerOpen, openPicker, closePicker, saveCurrency } = useCurrency();
-  const { expenses, isLoading: expensesLoading, add, remove } = useExpenses();
+  const { expenses, isLoading: expensesLoading, add, remove, clearAll } = useExpenses();
 
   return (
     <div className="flex flex-col h-dvh bg-gray-50 dark:bg-gray-950">
@@ -57,6 +57,7 @@ export default function HisaabPage() {
             currency={currency}
             expenses={expenses}
             onRemove={remove}
+            onClearAll={clearAll}
           />
         </div>
       </main>

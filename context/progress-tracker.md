@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Hisaab build** (H04 summary tab complete — H05 history tab next)
+**Hisaab build** (H05 history tab complete — H06 Vercel deployment next)
 
 ---
 
@@ -32,7 +32,7 @@
 | H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop   |
 | H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    | Merged to develop   |
 | H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    | Merged to develop   |
-| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                     |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete    |                     |
 | H06 — Vercel deployment                | —                                   | ⬜ Not started |                     |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
@@ -238,6 +238,17 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Hisaab H05 — History tab + CSV export (feat/hisaab-history-tab)
+
+- `apps/hisaab/lib/exportCsv.ts`: `exportToCSV(expenses, currency)` — RFC 4180 CSV, description double-quote escaped, Blob + `URL.createObjectURL` download, filename `hisaab-export-YYYY-MM-DD.csv`
+- `apps/hisaab/lib/groupByDate.ts`: `groupByDate(expenses)` — groups into `ExpenseGroup[]` sorted date-desc; "Today"/"Yesterday"/`"D MMM YYYY"` labels; items sorted by `createdAt` desc within each group
+- `apps/hisaab/components/DateGroupHeader.tsx`: label + horizontal rule divider
+- `apps/hisaab/components/CategoryFilterChips.tsx`: horizontally scrollable multi-select chips; `Set<Category>` toggle; `role="group"`, each chip `role="checkbox"` + `aria-checked`
+- `apps/hisaab/components/ExpenseRow.tsx`: icon + description + amount + trash; inline delete confirmation with fade animation; `aria-live="polite"` on confirm region
+- `apps/hisaab/components/HistoryTab.tsx`: search (clear X button), category chips, From/To date inputs with invalid-range error, count + export row; `filteredExpenses` via `useMemo`; two empty states (no expenses / no matches + clear filters); grouped list with `role="list"`; export button label shows filtered count when filters active
+
+---
+
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
@@ -264,8 +275,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Implement Hisaab H05 — History tab + CSV export (`feat/hisaab-history-tab`)
-2. Deploy Hisaab to Vercel (H06)
+1. Deploy Hisaab to Vercel (H06)
 
 ---
 
