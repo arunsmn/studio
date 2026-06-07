@@ -32,7 +32,7 @@
 | H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop   |
 | H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    | Merged to develop   |
 | H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    | Merged to develop   |
-| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete    |                     |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete    | Merged to develop   |
 | H06 — Vercel deployment                | —                                   | ⬜ Not started |                     |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
