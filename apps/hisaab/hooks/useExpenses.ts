@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { addExpense, deleteExpense, getAllExpenses } from "@/lib/db";
+import { addExpense, deleteExpense, getAllExpenses, clearAllExpenses } from "@/lib/db";
 import type { Expense } from "@/lib/types";
 
 interface UseExpensesResult {
@@ -9,6 +9,7 @@ interface UseExpensesResult {
   isLoading: boolean;
   add: (expense: Expense) => Promise<void>;
   remove: (id: string) => Promise<void>;
+  clearAll: () => Promise<void>;
 }
 
 export function useExpenses(): UseExpensesResult {
@@ -31,5 +32,10 @@ export function useExpenses(): UseExpensesResult {
     setExpenses((prev) => prev.filter((e) => e.id !== id));
   }, []);
 
-  return { expenses, isLoading, add, remove };
+  const clearAll = useCallback(async () => {
+    await clearAllExpenses();
+    setExpenses([]);
+  }, []);
+
+  return { expenses, isLoading, add, remove, clearAll };
 }

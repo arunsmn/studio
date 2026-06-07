@@ -30,6 +30,11 @@ export async function deleteExpense(id: string): Promise<void> {
   await db.delete(STORE_NAME, id);
 }
 
+export async function clearAllExpenses(): Promise<void> {
+  const db = await getDB();
+  await db.clear(STORE_NAME);
+}
+
 export async function getAllExpenses(): Promise<Expense[]> {
   const db = await getDB();
   const all = await db.getAll(STORE_NAME);

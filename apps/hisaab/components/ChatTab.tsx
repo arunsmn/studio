@@ -5,14 +5,12 @@ import { Send, MessageCircle } from "lucide-react";
 import { Button, ModelToggle } from "@studio/ui";
 import { useChatModel } from "@/hooks/useChatModel";
 import ExpenseBubble from "./ExpenseBubble";
-import UserMessageBubble from "./UserMessageBubble";
 import type { Currency, Expense, ParsedExpense } from "@/lib/types";
 
 interface ChatMessage {
   id: string;
-  type: "user" | "expense";
-  text?: string;
-  expense?: Expense;
+  type: "expense";
+  expense: Expense;
 }
 
 interface ChatTabProps {
@@ -38,15 +36,25 @@ export default function ChatTab({
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!expensesLoading && expenses.length > 0 && messages.length === 0) {
-      setMessages(
-        [...expenses].reverse().map((e) => ({
+    if (expensesLoading) return;
+
+    setMessages((prev) => {
+      // Initial load — populate from IndexedDB
+      if (prev.length === 0 && expenses.length > 0) {
+        return [...expenses].reverse().map((e) => ({
           id: e.id,
           type: "expense" as const,
           expense: e,
-        })),
-      );
-    }
+        }));
+      }
+      // Sync deletions from other tabs
+      if (prev.length > 0) {
+        const expenseIds = new Set(expenses.map((e) => e.id));
+        const updated = prev.filter((m) => expenseIds.has(m.expense.id));
+        return updated.length !== prev.length ? updated : prev;
+      }
+      return prev;
+    });
   }, [expensesLoading, expenses]);
 
   useEffect(() => {
@@ -59,13 +67,6 @@ export default function ChatTab({
     setInput("");
     setError(null);
     setIsLoading(true);
-
-    const userMsg: ChatMessage = {
-      id: crypto.randomUUID(),
-      type: "user",
-      text: userText,
-    };
-    setMessages((prev) => [...prev, userMsg]);
 
     try {
       const res = await fetch("/api/parse-expense", {
@@ -142,22 +143,16 @@ export default function ChatTab({
             </div>
           </div>
         ) : (
-          messages.map((msg) => {
-            if (msg.type === "user" && msg.text) {
-              return <UserMessageBubble key={msg.id} text={msg.text} />;
-            }
-            if (msg.type === "expense" && msg.expense && currency) {
-              return (
-                <ExpenseBubble
-                  key={msg.id}
-                  expense={msg.expense}
-                  currency={currency}
-                  onDelete={handleDelete}
-                />
-              );
-            }
-            return null;
-          })
+          messages.map((msg) =>
+            currency ? (
+              <ExpenseBubble
+                key={msg.id}
+                expense={msg.expense}
+                currency={currency}
+                onDelete={handleDelete}
+              />
+            ) : null,
+          )
         )}
 
         {isLoading && (

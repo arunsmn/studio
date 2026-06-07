@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { checkRateLimit, geminiProvider } from "@studio/ai-core";
+import { checkRateLimit, geminiProvider, claudeProvider } from "@studio/ai-core";
 import { buildInsightPrompt } from "@/lib/buildInsightPrompt";
 import { parseInsight } from "@/lib/parseInsight";
 import type { Expense } from "@/lib/types";
@@ -53,7 +53,12 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   try {
     const prompt = buildInsightPrompt(expenses, period, currency);
-    const raw = await geminiProvider(prompt);
+    let raw: string;
+    try {
+      raw = await geminiProvider(prompt);
+    } catch {
+      raw = await claudeProvider(prompt);
+    }
     const insight = parseInsight(raw);
     return Response.json({ insight });
   } catch {
