@@ -31,7 +31,7 @@
 | H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | Merged to develop   |
 | H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop   |
 | H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    | Merged to develop   |
-| H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    |                     |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    | Merged to develop   |
 | H05 — History tab + CSV export         | feat/hisaab-history-tab             | ⬜ Not started |                     |
 | H06 — Vercel deployment                | —                                   | ⬜ Not started |                     |
 
