@@ -1,19 +1,10 @@
 import { NextRequest } from "next/server";
-import { checkRateLimit, geminiProvider, claudeProvider } from "@studio/ai-core";
+import { geminiProvider, claudeProvider } from "@studio/ai-core";
 import { buildInsightPrompt } from "@/lib/buildInsightPrompt";
 import { parseInsight } from "@/lib/parseInsight";
 import type { Expense } from "@/lib/types";
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
-  const limit = await checkRateLimit(ip);
-  if (!limit.allowed) {
-    return Response.json(
-      { error: "Rate limit exceeded", waitSeconds: limit.waitSeconds },
-      { status: 429 },
-    );
-  }
-
   let body: unknown;
   try {
     body = await req.json();
