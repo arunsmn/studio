@@ -7,7 +7,7 @@
 
 ## Current Phase
 
-**Hisaab build** (H05 history tab complete — H06 Vercel deployment next)
+**Hisaab build** (complete — all sections live on Vercel)
 
 ---
 
@@ -33,7 +33,7 @@
 | H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    | Merged to develop   |
 | H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    | Merged to develop   |
 | H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete    | Merged to develop   |
-| H06 — Vercel deployment                | —                                   | ⬜ Not started |                     |
+| H06 — Vercel deployment                | —                                   | ✅ Complete    | Live on Vercel      |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -275,7 +275,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Deploy Hisaab to Vercel (H06)
+Hisaab is complete and deployed. Next app TBD.
 
 ---
 
