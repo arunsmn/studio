@@ -1,12 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pnpm build *)",
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "Bash(pnpm test *)",
-      "Bash(pnpm --filter=@studio/palette-ai test)",
-      "Bash(npx vitest *)"
+      "Bash(git -C /Users/arunsmn/Downloads/studio log --oneline -3)",
+      "Bash(git -C /Users/arunsmn/Downloads/studio add context/feature-specs/apps/hisaab/ context/progress-tracker.md)",
+      "Bash(git -C /Users/arunsmn/Downloads/studio commit -m ' *)"
     ]
   }
 }
