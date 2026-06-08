@@ -252,8 +252,6 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
-- [ ] Decide: deploy root and palette-ai to same Vercel team or separate?
-- [ ] Hisaab: confirm Vercel project setup (separate project, port 3002 local only)
 
 ---
 
