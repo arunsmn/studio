@@ -9,6 +9,12 @@ A chat-based personal expense tracker that turns natural language into structure
 
 ---
 
+| Chat | Summary | History |
+|---|---|---|
+| ![Chat tab](./public/screenshot-chat.png) | ![Summary tab](./public/screenshot-summary.png) | ![History tab](./public/screenshot-history.png) |
+
+---
+
 ## Features
 
 - **Natural language input** — type "spent 250 on lunch" or "uber to airport 450"; Claude or Gemini parses it into a structured expense record with amount, category, description, and date
