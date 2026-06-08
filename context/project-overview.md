@@ -36,10 +36,21 @@ integration, and senior-level frontend architecture skills to potential employer
 - Phase 2: live preview, export panel, history drawer, shareable URL,
   refinement chips, image upload
 
+### Hisaab (`apps/hisaab`)
+
+- URL: studio-hisaab.vercel.app
+- Tagline: Just say what you spent. Hisaab handles the rest.
+- Category: app
+- Target users: anyone who wants to track expenses without filling in forms; mobile-first
+- Core loop: user types a natural language message → Claude or Gemini parses it into a structured expense → saved to IndexedDB → appears in chat feed; Summary and History tabs update reactively
+- Phase 1: shipped — chat parsing, IndexedDB, currency picker, summary chart + AI insight, history with search/filter/export
+- Phase 2: receipt photo scan, recurring detection, budget goals
+
+---
+
 ## Planned Future Apps (placeholders only — not built yet)
 
 - MockMate: AI mock interview with live scoring
-- BudgetBuddy: chat-style expense tracker with NLP parsing
 - RightsReader: upload contract → plain English summary
 
 ## Goals by Role
