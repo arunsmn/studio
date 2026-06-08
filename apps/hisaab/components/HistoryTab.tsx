@@ -93,6 +93,7 @@ export default function HistoryTab({
   }
 
   function handleExport(): void {
+    if (!currency) return;
     exportToCSV(filteredExpenses, currency);
   }
 
