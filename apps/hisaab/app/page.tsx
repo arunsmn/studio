@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { MessageCircle, PieChart, List } from "lucide-react";
 import ChatTab from "@/components/ChatTab";
 import SummaryTab from "@/components/SummaryTab";
@@ -25,9 +26,18 @@ export default function HisaabPage() {
   return (
     <div className="flex flex-col h-dvh bg-gray-50 dark:bg-gray-950">
       <header className="flex-none flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-        <h1 className="text-base font-semibold text-gray-900 dark:text-gray-50">
-          Hisaab
-        </h1>
+        <div className="flex items-center gap-2">
+          <Link
+            href="https://studio-root.vercel.app/"
+            className="text-sm font-semibold text-gray-900 dark:text-gray-50 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+          >
+            Studio
+          </Link>
+          <span className="text-gray-300 dark:text-gray-700">/</span>
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            Hisaab
+          </span>
+        </div>
         {currency && (
           <button
             onClick={openPicker}

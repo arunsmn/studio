@@ -31,5 +31,6 @@ export const APPS: AppEntry[] = [
     url: "https://studio-hisaab.vercel.app/",
     color: "bg-emerald-100",
     icon: "Wallet",
+    swatches: ["#ed8f0c"],
   },
 ];

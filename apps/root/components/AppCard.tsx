@@ -11,7 +11,7 @@ interface AppCardProps {
 
 function getIcon(name: string): LucideIcon | null {
   const icon = (LucideIcons as Record<string, unknown>)[name];
-  return typeof icon === "function" ? (icon as LucideIcon) : null;
+  return icon ? (icon as LucideIcon) : null;
 }
 
 export function AppCard({ app }: AppCardProps) {
@@ -21,7 +21,7 @@ export function AppCard({ app }: AppCardProps) {
   const card = (
     <div
       className={cn(
-        "rounded-xl border border-gray-200 bg-white transition-colors duration-150 overflow-hidden",
+        "rounded-xl border border-gray-200 bg-white transition-colors duration-150 overflow-hidden h-full",
         "dark:border-gray-800 dark:bg-gray-900",
         isLive
           ? "hover:border-gray-400 dark:hover:border-gray-600"
@@ -43,7 +43,7 @@ export function AppCard({ app }: AppCardProps) {
             app.color
           )}
         >
-          {Icon && <Icon className="h-5 w-5 text-violet-700" />}
+          {Icon && <Icon className="h-5 w-5 text-black/70" />}
         </div>
         {!isLive && (
           <span className="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-gray-500 dark:bg-gray-800 dark:text-gray-400">
