@@ -1,7 +1,7 @@
 import { claudeProvider, geminiProvider } from "@studio/ai-core";
 import { buildExpensePrompt } from "@/lib/buildExpensePrompt";
 import { parseExpense } from "@/lib/parseExpense";
-import type { AIModel, ParsedExpense } from "@/lib/types";
+import type { AIModel, ParseExpenseResult } from "@/lib/types";
 
 interface GenerateOptions {
   message: string;
@@ -11,7 +11,7 @@ interface GenerateOptions {
 
 export async function generateParsedExpense(
   options: GenerateOptions,
-): Promise<ParsedExpense> {
+): Promise<ParseExpenseResult> {
   const provider = options.model === "claude" ? claudeProvider : geminiProvider;
   const prompt = buildExpensePrompt(options.message, options.currency);
 
