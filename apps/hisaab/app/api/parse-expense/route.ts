@@ -48,14 +48,24 @@ export async function POST(req: NextRequest): Promise<Response> {
   const timeout = setTimeout(() => controller.abort(), 15_000);
 
   try {
-    const parsed = await generateParsedExpense({ message, currency, model });
-    if (parsed.amount <= 0) {
+    const result = await generateParsedExpense({ message, currency, model });
+    if (result.type === "complete" && result.expense.amount <= 0) {
       return Response.json(
         { error: "amount: must be a positive number" },
         { status: 400 },
       );
     }
-    return Response.json(parsed);
+    if (result.type === "multiple") {
+      const validExpenses = result.expenses.filter((e) => e.amount > 0);
+      if (validExpenses.length < 2) {
+        return Response.json(
+          { error: "amount: must be a positive number" },
+          { status: 400 },
+        );
+      }
+      return Response.json({ type: "multiple", expenses: validExpenses });
+    }
+    return Response.json(result);
   } catch (err) {
     const code = err instanceof Error ? err.message : "UNKNOWN";
     if (code === "PARSE_FAILED") {

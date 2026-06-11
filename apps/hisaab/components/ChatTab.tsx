@@ -5,12 +5,20 @@ import { Send, MessageCircle } from "lucide-react";
 import { Button, ModelToggle } from "@studio/ui";
 import { useChatModel } from "@/hooks/useChatModel";
 import ExpenseBubble from "./ExpenseBubble";
-import type { Currency, Expense, ParsedExpense } from "@/lib/types";
+import type { Currency, Expense, ParsedExpense, ParseExpenseResult, PartialExpense } from "@/lib/types";
 
 interface ChatMessage {
   id: string;
-  type: "expense";
-  expense: Expense;
+  type: "expense" | "assistant";
+  expense?: Expense;
+  text?: string;
+}
+
+function extractAmount(text: string): number | null {
+  const match = text.replace(/,/g, "").match(/(\d+(?:\.\d+)?)/);
+  if (!match) return null;
+  const value = parseFloat(match[1]);
+  return Number.isFinite(value) ? value : null;
 }
 
 interface ChatTabProps {
@@ -33,6 +41,8 @@ export default function ChatTab({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pendingPartial, setPendingPartial] = useState<PartialExpense | null>(null);
+  const [pendingMultiple, setPendingMultiple] = useState<ParsedExpense[] | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,7 +60,9 @@ export default function ChatTab({
       // Sync deletions from other tabs
       if (prev.length > 0) {
         const expenseIds = new Set(expenses.map((e) => e.id));
-        const updated = prev.filter((m) => expenseIds.has(m.expense.id));
+        const updated = prev.filter(
+          (m) => m.type !== "expense" || expenseIds.has(m.expense!.id),
+        );
         return updated.length !== prev.length ? updated : prev;
       }
       return prev;
@@ -61,11 +73,78 @@ export default function ChatTab({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  async function addExpense(parsed: ParsedExpense) {
+    const expense: Expense = {
+      ...parsed,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      model,
+    };
+    await onAdd(expense);
+    setMessages((prev) => [
+      ...prev,
+      { id: expense.id, type: "expense", expense },
+    ]);
+  }
+
+  function addAssistantMessage(text: string) {
+    setMessages((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), type: "assistant", text },
+    ]);
+  }
+
   async function handleSend() {
     if (!input.trim() || isLoading || !currency) return;
     const userText = input.trim();
     setInput("");
     setError(null);
+
+    if (pendingMultiple) {
+      const normalized = userText.toLowerCase();
+      const isYes = ["yes", "y", "yeah", "yep", "confirm", "ok", "okay"].includes(normalized);
+      const isNo = ["no", "n", "nope", "cancel"].includes(normalized);
+
+      if (isYes) {
+        setIsLoading(true);
+        try {
+          for (const parsed of pendingMultiple) {
+            await addExpense(parsed);
+          }
+        } finally {
+          setIsLoading(false);
+          setPendingMultiple(null);
+        }
+        return;
+      }
+
+      if (isNo) {
+        addAssistantMessage("Okay, I won't add those.");
+        setPendingMultiple(null);
+        return;
+      }
+
+      setError('Please reply "yes" or "no"');
+      return;
+    }
+
+    if (pendingPartial) {
+      const amount = extractAmount(userText);
+      if (amount === null || amount <= 0) {
+        setError("Please enter a valid amount");
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        await addExpense({ ...pendingPartial, amount });
+      } finally {
+        setIsLoading(false);
+        setPendingPartial(null);
+      }
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -84,19 +163,22 @@ export default function ChatTab({
         throw new Error(data.error);
       }
 
-      const parsed = (await res.json()) as ParsedExpense;
-      const expense: Expense = {
-        ...parsed,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        model,
-      };
+      const result = (await res.json()) as ParseExpenseResult;
 
-      await onAdd(expense);
-      setMessages((prev) => [
-        ...prev,
-        { id: expense.id, type: "expense", expense },
-      ]);
+      if (result.type === "complete") {
+        await addExpense(result.expense);
+      } else if (result.type === "needsAmount") {
+        setPendingPartial(result.partial);
+        addAssistantMessage(`How much did you spend on ${result.partial.description}?`);
+      } else {
+        setPendingMultiple(result.expenses);
+        const lines = result.expenses
+          .map((e) => `${e.description}: ${currency.symbol}${e.amount.toFixed(2)}`)
+          .join("\n");
+        addAssistantMessage(
+          `I found ${result.expenses.length} expenses. Would you like me to record:\n${lines}\n\nReply "yes" to confirm or "no" to cancel.`,
+        );
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -143,16 +225,26 @@ export default function ChatTab({
             </div>
           </div>
         ) : (
-          messages.map((msg) =>
-            currency ? (
-              <ExpenseBubble
+          messages.map((msg) => {
+            if (msg.type === "expense") {
+              return currency ? (
+                <ExpenseBubble
+                  key={msg.id}
+                  expense={msg.expense!}
+                  currency={currency}
+                  onDelete={handleDelete}
+                />
+              ) : null;
+            }
+            return (
+              <div
                 key={msg.id}
-                expense={msg.expense}
-                currency={currency}
-                onDelete={handleDelete}
-              />
-            ) : null,
-          )
+                className="self-start max-w-[85%] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line"
+              >
+                {msg.text}
+              </div>
+            );
+          })
         )}
 
         {isLoading && (
@@ -186,7 +278,13 @@ export default function ChatTab({
                 void handleSend();
               }
             }}
-            placeholder="What did you spend?"
+            placeholder={
+              pendingPartial
+                ? "Enter the amount…"
+                : pendingMultiple
+                  ? 'Reply "yes" or "no"'
+                  : "What did you spend?"
+            }
             rows={1}
             disabled={isLoading || !currency}
             aria-label="Expense message"

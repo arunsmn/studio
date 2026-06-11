@@ -34,6 +34,17 @@ export interface ParsedExpense {
   date: string;
 }
 
+export interface PartialExpense {
+  category: Category;
+  description: string;
+  date: string;
+}
+
+export type ParseExpenseResult =
+  | { type: "complete"; expense: ParsedExpense }
+  | { type: "needsAmount"; partial: PartialExpense }
+  | { type: "multiple"; expenses: ParsedExpense[] };
+
 export interface ChartEntry {
   name: Category;
   value: number;
