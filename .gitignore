@@ -5,3 +5,8 @@ dist
 .env*.local
 *.tsbuildinfo
 .claude/
+# Mac system files
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
