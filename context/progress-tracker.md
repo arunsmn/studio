@@ -13,27 +13,27 @@
 
 ## Status by Section
 
-| Section                                | Branch                              | Status         | Notes               |
-| -------------------------------------- | ----------------------------------- | -------------- | ------------------- |
-| 01 — Monorepo scaffold                 | feat/monorepo-scaffold              | ✅ Complete    | Merged to develop   |
-| 02 — Shared packages                   | feat/shared-packages                | ✅ Complete    | Merged to develop   |
-| 03 — Root site                         | feat/root-site                      | ✅ Complete    | Merged to develop   |
-| 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop   |
-| 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop   |
-| 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop   |
-| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    | Merged to develop   |
-| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    | Merged to develop   |
-| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    | Merged to develop   |
-| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    | Merged to develop   |
-| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop   |
-| **Hisaab**                             |                                     |                |                     |
-| H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written |
-| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | Merged to develop   |
-| H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop   |
-| H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    | Merged to develop   |
-| H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    | Merged to develop   |
-| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete    | Merged to develop   |
-| H06 — Vercel deployment                | —                                   | ✅ Complete    | Live on Vercel      |
+| Section                                | Branch                              | Status      | Notes               |
+| -------------------------------------- | ----------------------------------- | ----------- | ------------------- |
+| 01 — Monorepo scaffold                 | feat/monorepo-scaffold              | ✅ Complete | Merged to develop   |
+| 02 — Shared packages                   | feat/shared-packages                | ✅ Complete | Merged to develop   |
+| 03 — Root site                         | feat/root-site                      | ✅ Complete | Merged to develop   |
+| 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete | Merged to develop   |
+| 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete | Merged to develop   |
+| 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete | Merged to develop   |
+| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete | Merged to develop   |
+| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete | Merged to develop   |
+| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete | Merged to develop   |
+| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete | Merged to develop   |
+| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete | Merged to develop   |
+| **Hisaab**                             |                                     |             |                     |
+| H00 — Specs                            | —                                   | ✅ Complete | All 6 specs written |
+| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete | Merged to develop   |
+| H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete | Merged to develop   |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete | Merged to develop   |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete | Merged to develop   |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete | Merged to develop   |
+| H06 — Vercel deployment                | —                                   | ✅ Complete | Live on Vercel      |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -213,6 +213,7 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 - `apps/hisaab/components/ChatTab.tsx`: ModelToggle sub-header; scrollable bubble area; empty state with example hints; loading dots bubble; sticky input bar (Enter to send, Shift+Enter for newline); error shown above input, clears on next keystroke; `useEffect` restores expenses from IndexedDB into messages on mount; `model` included on `Expense` object
 
 **User-specified completions applied:**
+
 - `useEffect` that initialises messages from persisted expenses
 - `model` field on `Expense` object in `handleSend`
 
@@ -257,23 +258,25 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Decisions Made
 
-| Decision                                     | Rationale                                                                     | Date     |
-| -------------------------------------------- | ----------------------------------------------------------------------------- | -------- |
-| Use pnpm + Turborepo                         | Industry standard monorepo tooling, fast installs                             | Setup    |
-| Default AI provider: Gemini                  | Free tier 1500 req/day, preserves Claude credits                              | Setup    |
-| Claude model: claude-haiku-4-5-20251001      | Cheapest Claude, fast, sufficient for JSON generation                         | Setup    |
-| Rate limiter: in-memory Map only for Phase 1 | Skip Upstash — Anthropic hard cap is the real safety net. Upgrade in Phase 2. | Setup    |
-| Mobile 5 colours: banner + labels            | Discussed and confirmed by user                                               | Planning |
-| Mobile 8 colours: banner + scroll            | Discussed and confirmed by user                                               | Planning |
-| Strategy pattern for AI providers            | Extensible — adding OpenAI = 1 file + 1 line                                  | Planning |
-| No auth/DB in Phase 1 and 2                  | Portfolio tool, localStorage sufficient                                       | Planning |
+| Decision                                     | Rationale                                                                                         | Date         |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------ |
+| Use pnpm + Turborepo                         | Industry standard monorepo tooling, fast installs                                                 | Setup        |
+| Default AI provider: Gemini                  | Free tier 1500 req/day, preserves Claude credits                                                  | Setup        |
+| Claude model: claude-haiku-4-5-20251001      | Cheapest Claude, fast, sufficient for JSON generation                                             | Setup        |
+| Rate limiter: in-memory Map only for Phase 1 | Skip Upstash — Anthropic hard cap is the real safety net. Upgrade in Phase 2.                     | Setup        |
+| Mobile 5 colours: banner + labels            | Discussed and confirmed by user                                                                   | Planning     |
+| Mobile 8 colours: banner + scroll            | Discussed and confirmed by user                                                                   | Planning     |
+| Strategy pattern for AI providers            | Extensible — adding OpenAI = 1 file + 1 line                                                      | Planning     |
+| No auth/DB in Phase 1 and 2                  | Portfolio tool, localStorage sufficient                                                           | Planning     |
 | Hisaab rate limiter                          | Reuse `@studio/ai-core` `checkRateLimit` — apps are separate Vercel deployments, already isolated | Hisaab build |
 
 ---
 
 ## Next Steps
 
-Hisaab is complete and deployed. Next app TBD.
+1. Build Skrawl (apps/skrawl) — TensorFlow.js drawing recognition game
+2. Polish root site — proper hero header, studio description, footer with name/links
+3. MockMate — AI mock interview (after Skrawl)
 
 ---
 
