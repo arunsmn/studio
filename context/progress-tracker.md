@@ -7,33 +7,34 @@
 
 ## Current Phase
 
-**Hisaab build** (complete — all sections live on Vercel)
+**Skrawl build** (learning-first, file by file — Canvas API basics)
 
 ---
 
 ## Status by Section
 
-| Section                                | Branch                              | Status      | Notes               |
-| -------------------------------------- | ----------------------------------- | ----------- | ------------------- |
-| 01 — Monorepo scaffold                 | feat/monorepo-scaffold              | ✅ Complete | Merged to develop   |
-| 02 — Shared packages                   | feat/shared-packages                | ✅ Complete | Merged to develop   |
-| 03 — Root site                         | feat/root-site                      | ✅ Complete | Merged to develop   |
-| 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete | Merged to develop   |
-| 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete | Merged to develop   |
-| 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete | Merged to develop   |
-| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete | Merged to develop   |
-| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete | Merged to develop   |
-| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete | Merged to develop   |
-| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete | Merged to develop   |
-| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete | Merged to develop   |
-| **Hisaab**                             |                                     |             |                     |
-| H00 — Specs                            | —                                   | ✅ Complete | All 6 specs written |
-| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete | Merged to develop   |
-| H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete | Merged to develop   |
-| H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete | Merged to develop   |
-| H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete | Merged to develop   |
-| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete | Merged to develop   |
-| H06 — Vercel deployment                | —                                   | ✅ Complete | Live on Vercel      |
+| Section                                | Branch                              | Status         | Notes                      |
+| -------------------------------------- | ----------------------------------- | -------------- | -------------------------- |
+| 01 — Monorepo scaffold                 | feat/monorepo-scaffold              | ✅ Complete    | Merged to develop          |
+| 02 — Shared packages                   | feat/shared-packages                | ✅ Complete    | Merged to develop          |
+| 03 — Root site                         | feat/root-site                      | ✅ Complete    | Merged to develop          |
+| 04 — Shared UI components              | feat/shared-ui-components           | ✅ Complete    | Merged to develop          |
+| 05 — PaletteAI API layer               | feat/palette-ai-api                 | ✅ Complete    | Merged to develop          |
+| 06 — PaletteAI input + swatches        | feat/palette-ai-ui-input-swatches   | ✅ Complete    | Merged to develop          |
+| 07 — PaletteAI page + preview + export | feat/palette-ai-page-preview-export | ✅ Complete    | Merged to develop          |
+| 08 — Tests + polish                    | feat/palette-ai-tests-polish        | ✅ Complete    | Merged to develop          |
+| 09 — Vercel deployment                 | feat/vercel-deployment              | ✅ Complete    | Merged to develop          |
+| 10a — Shareable URL                    | feat/palette-ai-shareable-url       | ✅ Complete    | Merged to develop          |
+| 10b — Image upload                     | feat/palette-ai-image-upload        | ✅ Complete    | Merged to develop          |
+| **Hisaab**                             |                                     |                |                            |
+| H00 — Specs                            | —                                   | ✅ Complete    | All 6 specs written        |
+| H01 — Scaffold                         | feat/hisaab-scaffold                | ✅ Complete    | Merged to develop          |
+| H02 — Currency picker                  | feat/hisaab-currency-picker         | ✅ Complete    | Merged to develop          |
+| H03 — Chat tab                         | feat/hisaab-chat-tab                | ✅ Complete    | Merged to develop          |
+| H04 — Summary tab                      | feat/hisaab-summary-tab             | ✅ Complete    | Merged to develop          |
+| H05 — History tab + CSV export         | feat/hisaab-history-tab             | ✅ Complete    | Merged to develop          |
+| H06 — Vercel deployment                | —                                   | ✅ Complete    | Live on Vercel             |
+| Skrawl — Drawing recognition game      | apps/skrawl                         | 🔄 In progress | TensorFlow.js + Canvas API |
 
 Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
@@ -250,6 +251,20 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ---
 
+### Skrawl — Drawing recognition game (apps/skrawl)
+
+**Approach:** Learning-first, file by file — not SDD  
+**Tech:** TensorFlow.js (CNN), Canvas API, Next.js, no backend  
+**Theme:** Warm parchment light/dark toggle, #FF6A3A accent  
+**Name:** Skrawl (final — subject to change)
+
+#### Phase 1 — Canvas API basics (in progress)
+
+- Learning Canvas API — mousedown/mousemove/mouseup/mouseleave
+- Practising with plain HTML file before Next.js
+
+---
+
 ## Open Questions
 
 - [ ] Confirm final domain name for yourdomain.dev
@@ -274,9 +289,13 @@ Status key: ⬜ Not started · 🔄 In progress · ✅ Complete · ❌ Blocked
 
 ## Next Steps
 
-1. Build Skrawl (apps/skrawl) — TensorFlow.js drawing recognition game
-2. Polish root site — proper hero header, studio description, footer with name/links
-3. MockMate — AI mock interview (after Skrawl)
+1. Finish Canvas API learning — touch events, Next.js integration
+2. Load TensorFlow.js Quick Draw model
+3. Wire canvas output to model inference
+4. Build game mechanics (timer, word list, scoring)
+5. Polish UI — warm theme, #FF6A3A accent, responsive layout
+6. Deploy to Vercel as apps/skrawl
+7. Polish root site — hero header, studio description, footer
 
 ---
 
