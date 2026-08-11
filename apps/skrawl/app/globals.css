@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f5efe6;
+  --canvas-bg: #fffdf9;
+  --surface: #ffffff;
+  --border: #e8e0d4;
+  --text: #1c1a17;
+  --muted: #6b6358;
+  --accent: #ff6a3a;
+}
+
+.dark {
+  --bg: #141210;
+  --canvas-bg: #fffdf9;
+  --surface: #1f1d1a;
+  --border: #2c2a26;
+  --text: #f5efe6;
+  --muted: #9c9489;
+  --accent: #ff6a3a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+canvas {
+  touch-action: none;
+  cursor: crosshair;
+}
